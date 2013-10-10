@@ -1,0 +1,72 @@
+---
+
+- hosts: all
+  user: vagrant
+  sudo: True
+
+  vars:
+    PORT_NUM: 6543
+
+  tasks:
+
+  #   # by having a tag we can narrow down a specific group of tasks
+  #   # during configuration.
+    - name: update cache
+      apt: update_cache=yes
+      tags:
+        - apt
+
+  #   - name: Install dev pkgs
+  #     apt: pkg=$item
+  #     with_items:
+  #        - build-essential
+  #        - python-dev
+  #        - libevent-dev
+  #        - python-pip
+  #        - python-setuptools
+  #        - curl
+  #        - vim
+  #        - git-core
+
+  #     tags:
+  #       - apt
+
+    # - name: Install mysql
+    #   apt: pkg=$item
+    #   with_items:
+    #      - mysql-server
+    #      - mysql-client
+
+    #   tags:
+    #     - mysql
+
+    # - name: Install Nginx
+    #   apt: pkg=$item
+    #   with_items:
+    #      - nginx
+    #      - php5-fpm 
+    #      - php5-mysql
+    #   tags:
+    #     - nginx
+
+    # - name: pip install stuff
+    #   pip: name=$item
+    #   with_items:
+    #      - distribute
+    #      - virtualenv
+
+    # - name: Configure nginx default
+    #   template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
+    #   tags:
+    #     - nginx
+
+    # - name: Restart Nginx
+    #   service: name=nginx state=restarted
+    #   tags:
+    #     - nginx
+    - name: Change root password
+      user: name=root password="password"
+
+    # - name: Ensure vagrant user is allowed to sudo
+      # lineinfile: dest={{ sudoers_path }} create=yes regexp="vagrant"
+      # line="vagrant ALL=NOPASSWD:ALL" state=present
