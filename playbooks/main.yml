@@ -38,7 +38,7 @@
       tags:
         - mysql
 
-    - name: Install Nginx & PHP
+    - name: Install Nginx/PHP
       apt: pkg=$item
       with_items:
          - nginx
@@ -59,10 +59,10 @@
       tags:
         - nginx
 
-    # - name: Restart Nginx
-    #   service: name=nginx state=restarted
-    #   tags:
-    #     - nginx
+    - name: Restart Nginx
+      service: name=nginx state=restarted
+      tags:
+        - nginx
     - name: Change root password
       user: name=root password="password"
 
