@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "puppetlabs-precise64"
-  config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-server-12042-x64-vbox4210-nocm.box"
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 
   config.vm.network :private_network, ip: "11.22.33.44"
   config.vm.network :forwarded_port, guest: 80, host: 8080
@@ -18,15 +18,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
-  # config.vm.synced_folder "vhosts/", "/var/www/", :owner => "www-data"
+  config.vm.synced_folder "vhosts/", "/var/www/", :owner => "www-data"
   # config.vm.synced_folder "database/", "/srv/database"
   # config.vm.synced_folder "database/data/", "/var/lib/mysql", :extra => 'dmode=777,fmode=777'
 
-  config.vm.provision :shell, :path => "ansible.sh"
+  # config.vm.provision :shell, :path => "ansible.sh"
 
-  # config.vm.provision "ansible" do |ansible|
-  #   ansible.playbook = "playbooks/main.yml"
-  # end
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbooks/main.yml"
+    ansible.verbose = "vvv"
+    ansible.sudo = "true"
+    ansible.host_key_checking = "false"
+    # ansible.inventory_path = ""
+  end
 
 
   # If true, then any SSH connections made will enable agent forwarding.

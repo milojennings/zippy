@@ -5,7 +5,7 @@
   sudo: True
 
   vars:
-    PORT_NUM: 6543
+    PORT_NUM: 2222
 
   tasks:
 
@@ -16,49 +16,48 @@
       tags:
         - apt
 
-  #   - name: Install dev pkgs
-  #     apt: pkg=$item
-  #     with_items:
-  #        - build-essential
-  #        - python-dev
-  #        - libevent-dev
-  #        - python-pip
-  #        - python-setuptools
-  #        - curl
-  #        - vim
-  #        - git-core
+    - name: Install dev pkgs
+      apt: pkg=$item
+      with_items:
+        - build-essential
+        - python-dev
+        - libevent-dev
+        - python-pip
+        - python-setuptools
+        - curl
+        - vim
+        - git-core
+      tags:
+        - apt
 
-  #     tags:
-  #       - apt
+    - name: Install mysql
+      apt: pkg=$item
+      with_items:
+         - mysql-server
+         - mysql-client
+      tags:
+        - mysql
 
-    # - name: Install mysql
-    #   apt: pkg=$item
-    #   with_items:
-    #      - mysql-server
-    #      - mysql-client
+    - name: Install Nginx & PHP
+      apt: pkg=$item
+      with_items:
+         - nginx
+         - php5-fpm 
+         - php5-mysql
+      tags:
+        - nginx
 
-    #   tags:
-    #     - mysql
+    - name: pip install stuff
+      pip: name=$item
+      with_items:
+         - distribute
+         - virtualenv
+         # - ansible
 
-    # - name: Install Nginx
-    #   apt: pkg=$item
-    #   with_items:
-    #      - nginx
-    #      - php5-fpm 
-    #      - php5-mysql
-    #   tags:
-    #     - nginx
-
-    # - name: pip install stuff
-    #   pip: name=$item
-    #   with_items:
-    #      - distribute
-    #      - virtualenv
-
-    # - name: Configure nginx default
-    #   template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
-    #   tags:
-    #     - nginx
+    - name: Configure nginx default
+      template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
+      tags:
+        - nginx
 
     # - name: Restart Nginx
     #   service: name=nginx state=restarted
