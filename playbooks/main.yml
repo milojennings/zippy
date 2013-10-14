@@ -5,7 +5,7 @@
   sudo: True
 
   vars:
-    PORT_NUM: 2222
+    PORT_NUM: 6543
 
   tasks:
 
