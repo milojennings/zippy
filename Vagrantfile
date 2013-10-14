@@ -26,8 +26,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbooks/main.yml"
-    # ansible output is limited when used inside of vagrant, 
-    #   so utmost verbosity is necessary (it is still not enough)
+    ## ansible output is limited when used inside of vagrant, 
+    ## so utmost verbosity is necessary (it is still not enough)
     ansible.verbose = "vvv"
     ansible.sudo = "true"
     ansible.host_key_checking = "false"

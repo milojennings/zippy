@@ -16,7 +16,7 @@
       tags:
         - apt
 
-    - name: Install dev pkgs
+    - name: install dev pkgs
       apt: pkg=$item
       with_items:
         - build-essential
@@ -30,7 +30,7 @@
       tags:
         - apt
 
-    - name: Install mysql
+    - name: install mysql
       apt: pkg=$item
       with_items:
          - mysql-server
@@ -38,7 +38,7 @@
       tags:
         - mysql
 
-    - name: Install Nginx/PHP
+    - name: install nginx/php
       apt: pkg=$item
       with_items:
          - nginx
@@ -54,16 +54,16 @@
          - virtualenv
          # - ansible
 
-    - name: Configure nginx default
+    - name: configure nginx default
       template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
       tags:
         - nginx
 
-    - name: Restart Nginx
+    - name: restart nginx
       service: name=nginx state=restarted
       tags:
         - nginx
-    - name: Change root password
+    - name: change root password
       user: name=root password="password"
 
     # - name: Ensure vagrant user is allowed to sudo
