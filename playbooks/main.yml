@@ -30,21 +30,17 @@
       tags:
         - apt
 
-    - name: install mysql
+  #   # combined install of these packages as vagrant reconnects for each task (this should speed things up!)
+    - name: install mysql/nginx/php (EMP stack)
       apt: pkg=$item
       with_items:
          - mysql-server
          - mysql-client
-      tags:
-        - mysql
-
-    - name: install nginx/php
-      apt: pkg=$item
-      with_items:
          - nginx
          - php5-fpm 
          - php5-mysql
       tags:
+        - mysql
         - nginx
 
     - name: pip install stuff
@@ -54,10 +50,10 @@
          - virtualenv
          # - ansible
 
-    - name: configure nginx default
-      template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
-      tags:
-        - nginx
+    # - name: configure nginx default
+    #   template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
+    #   tags:
+    #     - nginx
 
     - name: restart nginx
       service: name=nginx state=restarted
