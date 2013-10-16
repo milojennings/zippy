@@ -50,10 +50,10 @@
          - virtualenv
          # - ansible
 
-    - name: configure nginx default
-      template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
-      tags:
-        - nginx
+    # - name: configure nginx default
+    #   template: src=nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
+    #   tags:
+    #     - nginx
 
     - name: restart nginx
       service: name=nginx state=restarted
