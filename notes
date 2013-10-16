@@ -1,0 +1,31 @@
+    .--. 
+   |o_o | 
+   |:_/ | 
+  //   \ \ 
+ (|     | ) 
+/'\_   _/`\ 
+\___)=(___/ 
+
+
+vagrantbox.es has a list of vagrant boxes available
+
+We will use this for now:
+http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
+
+We may consider upgrading to the next Ubuntu LTS release when that arrives (14.04)
+
+
+
+###################
+
+current command set to get rockin' (you need: ansible, git, vagrant & virtualbox on the host machine):
+
+git clone https://github.com/milojennings/zippy.git
+cd zippy
+vagrant box add precise64 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
+vagrant up
+
+
+###################
+
+vagrant up only needs to be done once (unless you reboot), vagrant provision should be used if changes are made in ansible, use vagrant reload if changes are made to the Vagrantfile
