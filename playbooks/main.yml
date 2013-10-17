@@ -4,8 +4,8 @@
   user: vagrant
   sudo: True
 
-  vars:
-    PORT_NUM: 6543
+  # vars:
+  #   PORT_NUM: 6543
 
   tasks:
 
@@ -16,32 +16,40 @@
       tags:
         - apt
 
-    - name: install dev pkgs
+    - name: install dev pkgs / EMP stack
       apt: pkg=$item
       with_items:
         - build-essential
         - python-dev
         - libevent-dev
         - python-pip
+        - python-apt
         - python-setuptools
         - curl
         - vim
         - git-core
+        - mysql-server
+        - mysql-client
+        - nginx
+        - php5-fpm 
+        - php5-mysql
       tags:
         - apt
-
-  #   # combined install of these packages as vagrant reconnects for each task (this should speed things up!)
-    - name: install mysql/nginx/php (EMP stack)
-      apt: pkg=$item
-      with_items:
-         - mysql-server
-         - mysql-client
-         - nginx
-         - php5-fpm 
-         - php5-mysql
-      tags:
         - mysql
         - nginx
+
+  #   # combined install of these packages as vagrant reconnects for each task (this should speed things up!)
+    # - name: install mysql/nginx/php (EMP stack)
+    #   apt: pkg=$item
+    #   with_items:
+    #      - mysql-server
+    #      - mysql-client
+    #      - nginx
+    #      - php5-fpm 
+    #      - php5-mysql
+    #   tags:
+    #     - mysql
+    #     - nginx
 
     - name: pip install stuff
       pip: name=$item
@@ -59,8 +67,10 @@
       service: name=nginx state=restarted
       tags:
         - nginx
-    - name: change root password
-      user: name=root password="password"
+
+        # this doesn't work yet
+    # - name: change root password
+    #   user: name=root password="password"
 
     # - name: Ensure vagrant user is allowed to sudo
       # lineinfile: dest={{ sudoers_path }} create=yes regexp="vagrant"
