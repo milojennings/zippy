@@ -11,11 +11,12 @@
 
   #   # by having a tag we can narrow down a specific group of tasks
   #   # during configuration.
-    - name: update cache
-      apt: update_cache=yes
+    - name: update cache / upgrade pkgs
+      apt: update_cache=yes upgrade=dist
       tags:
         - apt
 
+  #   # combined install of these packages as vagrant reconnects for each task (this should speed things up!)
     - name: install dev pkgs / EMP stack
       apt: pkg=$item
       with_items:
@@ -28,9 +29,11 @@
         - curl
         - vim
         - git-core
+        - nginx
         - mysql-server
         - mysql-client
-        - nginx
+        - php5
+        - php5-cgi
         - php5-fpm 
         - php5-mysql
       tags:
@@ -38,7 +41,6 @@
         - mysql
         - nginx
 
-  #   # combined install of these packages as vagrant reconnects for each task (this should speed things up!)
     # - name: install mysql/nginx/php (EMP stack)
     #   apt: pkg=$item
     #   with_items:

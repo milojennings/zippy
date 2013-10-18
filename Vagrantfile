@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
-  config.vm.synced_folder "vhosts/", "/var/www/", :owner => "www-data"
+  # config.vm.synced_folder "vhosts/", "/var/www/", :owner => "www-data"
   # config.vm.synced_folder "database/", "/srv/database"
   # config.vm.synced_folder "database/data/", "/var/lib/mysql", :extra => 'dmode=777,fmode=777'
 
