@@ -69,21 +69,21 @@
     #     - nginx
 
     - name: install mysql
-      action: shell mysql_secure_installation sudo=true
+      command: mysql_secure_installation sudo=true
       tags:
         - mysql
 
 
     - name: set up working directory
-      action: shell mkdir -p /var/www/$(whoami)/{conf,log,testsite.dev/public} sudo=true
+      command: mkdir -p /var/www/$(whoami)/{conf,log,testsite.dev/public} sudo=true
       tags:
         - mysql
 
 
     - name: set up php-fpm
-      action: shell cp /etc/php5/fpm/pool.d/www.conf /var/www/$(whoami)/conf/php5-fpm-pool.conf sudo=true
-      action: shell mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off sudo=true
-      action: shell ln -s /var/www/$(whoami)/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$(whoami).conf
+      command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$(whoami)/conf/php5-fpm-pool.conf sudo=true
+      command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off sudo=true
+      command: ln -s /var/www/$(whoami)/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$(whoami).conf
       tags:
         - php-fpm
 
