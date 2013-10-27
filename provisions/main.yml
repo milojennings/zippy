@@ -31,12 +31,13 @@
         - curl
         - vim
         - git-core
-        - nginx-full
-        - php5-fpm
-        - php5-cli
-        - php5-mcrypt
-        - php5-mysql
         - mysql-server
+        - mysql-client
+        - nginx
+        - php5-fpm
+        - php5-mysql
+        # - php5-cli
+        # - php5-mcrypt
         # - dnsmasq
       tags:
         - apt
@@ -68,24 +69,28 @@
     #   tags:
     #     - nginx
 
-    - name: install mysql
-      command: mysql_secure_installation sudo=true
-      tags:
-        - mysql
+    # - name: install mysql
+    #   command: mysql_secure_installation
+    #   tags:
+    #     - mysql
 
 
     - name: set up working directory
-      command: mkdir -p /var/www/$(whoami)/{conf,log,testsite.dev/public} sudo=true
+      command: mkdir -p /var/www/$(whoami)/public/
       tags:
         - mysql
 
+    - name: enable php-fpm socket
+      command: cp /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.orig
+      command: sudo sed -i '/listen = 127.0.0.1:9000/c\listen = \/var\/run\/php5-fpm.sock' /etc/php5/fpm/pool.d/www.conf
 
-    - name: set up php-fpm
-      command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$(whoami)/conf/php5-fpm-pool.conf sudo=true
-      command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off sudo=true
-      command: ln -s /var/www/$(whoami)/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$(whoami).conf
-      tags:
-        - php-fpm
+
+    # - name: set up php-fpm
+    #   command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$(whoami)/conf/php5-fpm-pool.conf
+    #   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off
+    #   command: ln -s /var/www/$(whoami)/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$(whoami).conf
+    #   tags:
+    #     - php-fpm
 
 
     # - name: install mysql
