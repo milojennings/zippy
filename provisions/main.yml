@@ -84,6 +84,16 @@
       command: cp /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.orig
       command: sudo sed -i '/listen = 127.0.0.1:9000/c\listen = \/var\/run\/php5-fpm.sock' /etc/php5/fpm/pool.d/www.conf
 
+    - name: install composer/pomander
+      command: curl -s https://getcomposer.org/installer | php
+      command: sudo mv composer.phar /usr/local/bin/composer
+      command: composer global require pomander/pomander:@stable
+      command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+
+# ### VirtualBox - http://www.virtualbox.org
+# # Run this command: wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+# deb http://download.virtualbox.org/virtualbox/debian precise contrib
+
 
     # - name: set up php-fpm
     #   command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$(whoami)/conf/php5-fpm-pool.conf
