@@ -99,6 +99,12 @@
       tags:
         - nginx
 
+
+    - name: restart php-fpm
+      service: name=php5-fpm state=restarted
+      tags:
+        - php
+
         # this doesn't work yet
     # - name: change root password
     #   user: name=root password="password"
