@@ -15,8 +15,8 @@ http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-a
 We may consider upgrading to the next Ubuntu LTS release when that arrives (14.04)
 
 
-
 ###################
+
 
 current command set to get rockin' (you need: ansible, git, vagrant & virtualbox on the host machine):
 
