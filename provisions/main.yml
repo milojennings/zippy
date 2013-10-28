@@ -76,7 +76,7 @@
 
 
     - name: set up working directory
-      command: mkdir -p /var/www/$(whoami)/public/
+      command: mkdir -p /var/www/$WHOAMI/public/
       tags:
         - mysql
 
@@ -111,9 +111,9 @@
 
 
     # - name: set up php-fpm
-    #   command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$(whoami)/conf/php5-fpm-pool.conf
+    #   command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$WHOAMI/conf/php5-fpm-pool.conf
     #   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off
-    #   command: ln -s /var/www/$(whoami)/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$(whoami).conf
+    #   command: ln -s /var/www/$WHOAMI/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$WHOAMI.conf
     #   tags:
     #     - php-fpm
 
