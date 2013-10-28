@@ -28,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = "provisions/main.yml"
     ## ansible output is limited when used inside of vagrant, 
     ## so utmost verbosity is necessary (it is still not enough)
-    ansible.verbose = "vvv"
+    ansible.verbose = "vvvv"
     ansible.sudo = "true"
     ansible.host_key_checking = "false"
     # ansible.inventory_path = ""

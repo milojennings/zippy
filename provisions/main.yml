@@ -80,15 +80,30 @@
       tags:
         - mysql
 
+
+        ## this nginx configuring is untested, comment out if destruction ensues
+    - name: nginx configuring
+      command: cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.orig
+      command: sudo sed -i '/index index.html index.htm;/c\index index.html index.htm index.php;' /etc/nginx/sites-available/default
+      command: sudo echo "location ~ .php$ { fastcgi_split_path_info ^(.+.php)(/.+)$; fastcgi_pass unix:/var/run/php5-fpm.sock; fastcgi_index index.php; include fastcgi_params; }" /etc/nginx/sites-available/default
+      tags:
+        - nginx
+
     - name: enable php-fpm socket
       command: cp /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.orig
       command: sudo sed -i '/listen = 127.0.0.1:9000/c\listen = \/var\/run\/php5-fpm.sock' /etc/php5/fpm/pool.d/www.conf
+      tags:
+        - php
+
 
     - name: install composer/pomander
       command: curl -s https://getcomposer.org/installer | php
       command: sudo mv composer.phar /usr/local/bin/composer
       command: composer global require pomander/pomander:@stable
       command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+      tags:
+        - pomander
+
 
 # ### VirtualBox - http://www.virtualbox.org
 # # Run this command: wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
