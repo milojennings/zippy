@@ -74,6 +74,33 @@
     #   tags:
     #     - mysql
 
+          # # VirtualBox - http://www.virtualbox.org
+          # # Run this command: wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+            #  deb http://download.virtualbox.org/virtualbox/debian precise contrib
+
+
+      # - name: set up php-fpm
+      #   command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$WHOAMI/conf/php5-fpm-pool.conf
+      #   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off
+      #   command: ln -s /var/www/$WHOAMI/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$WHOAMI.conf
+      #   tags:
+      #     - php-fpm
+
+
+      # - name: install mysql
+      #   action: shell mysql_secure_installation sudo=true
+      #   tags:
+      #     - mysql
+
+              # this doesn't work yet
+        # - name: change root password
+        #   user: name=root password="password"
+
+      # - name: Ensure vagrant user is allowed to sudo
+        # lineinfile: dest={{ sudoers_path }} create=yes regexp="vagrant"
+        # line="vagrant ALL=NOPASSWD:ALL" state=present
+
+
 
     - name: set up working directory
       command: mkdir -p /var/www/$WHOAMI/public/
@@ -105,23 +132,6 @@
         - pomander
 
 
-# # VirtualBox - http://www.virtualbox.org
-# # Run this command: wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
-# deb http://download.virtualbox.org/virtualbox/debian precise contrib
-
-
-    # - name: set up php-fpm
-    #   command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$WHOAMI/conf/php5-fpm-pool.conf
-    #   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off
-    #   command: ln -s /var/www/$WHOAMI/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$WHOAMI.conf
-    #   tags:
-    #     - php-fpm
-
-
-    # - name: install mysql
-    #   action: shell mysql_secure_installation sudo=true
-    #   tags:
-    #     - mysql
 
 
     - name: restart nginx
@@ -135,10 +145,3 @@
       tags:
         - php
 
-        # this doesn't work yet
-    # - name: change root password
-    #   user: name=root password="password"
-
-    # - name: Ensure vagrant user is allowed to sudo
-      # lineinfile: dest={{ sudoers_path }} create=yes regexp="vagrant"
-      # line="vagrant ALL=NOPASSWD:ALL" state=present
