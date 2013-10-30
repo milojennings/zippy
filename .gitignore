@@ -1,3 +1,6 @@
 # ignore .vagrant folder, as it is auto-generated
 
 .vagrant
+
+# only an issue on windows
+desktop.ini
