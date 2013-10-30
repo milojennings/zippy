@@ -9,6 +9,10 @@
 
   tasks:
 
+    - name: WHOAMI registering
+      command: whoami sudo: false
+        register: whoami
+
   #   # by having a tag we can narrow down a specific group of tasks
   #   # during configuration.
     - name: update cache / upgrade pkgs
@@ -103,7 +107,7 @@
 
 
     - name: set up working directory
-      command: mkdir -p /var/www/$WHOAMI/public/
+      command: mkdir -p /var/www/{$whoami.stdout}/public/
       tags:
         - mysql
 
