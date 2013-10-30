@@ -1,0 +1,3 @@
+# ignore .vagrant folder, as it is auto-generated, and will cause problems when cloning on multiple systems
+
+.vagrant
