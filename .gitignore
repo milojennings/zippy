@@ -1,3 +1,4 @@
-# ignore .vagrant folder, as it is auto-generated
+# ignore these, as they are auto-generated
 
 .vagrant
+vagrant_ansible_inventory_default
