@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Requires https://github.com/fgrehm/vagrant-cachier
   config.cache.enable :apt
 
-  # config.vm.network :private_network, ip: "11.22.33.44"
+  config.vm.network :private_network, ip: "11.22.33.44"
   config.vm.network :forwarded_port, guest: 80, host: 8080
 
   config.vm.provider :virtualbox do |vb|
