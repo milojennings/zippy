@@ -9,14 +9,18 @@
 
   tasks:
 
-    - name: WHOAMI registering
-      command: whoami sudo: false
-        register: whoami
+    # - name: WHOAMI registering
+    #   command: whoami 
+    #   sudo: false
+    #   register: whoami
+
+    # - action: shell whoami
+    #   register: whoami
 
   #   # by having a tag we can narrow down a specific group of tasks
   #   # during configuration.
     - name: update cache / upgrade pkgs
-      apt: update_cache=yes upgrade=dist
+      apt: update_cache=yes upgrade=dist cache_valid_time=3600
       tags:
         - apt
 ## sudo apt-get install nginx-full php5-fpm php5-cli php5-mcrypt php5-mysql mysql-server dnsmasq
@@ -25,18 +29,19 @@
     - name: install dev pkgs / EMP stack
       apt: pkg=$item
       with_items:
-        # - build-essential
-        # - linux-generic 
+        - build-essential
+        - linux-generic 
         # - python-dev
         # - libevent-dev
         # - python-pip
-        # - python-apt
         # - python-setuptools
         - curl
         - vim
         - git-core
         - mysql-server
         - mysql-client
+        - python-apt
+        - python-mysqldb
         - nginx
         - php5-fpm
         - php5-mysql
@@ -68,10 +73,58 @@
     #      - virtualenv
          # - ansible
 
-    # - name: configure nginx default
-    #   template: src=configs/nginx-conf/default.j2 dest=/etc/nginx/sites-available/default
-    #   tags:
-    #     - nginx
+    - name: configure nginx startup
+      template: src=configs/nginx-conf/nginx.j2 dest=/etc/nginx/nginx.conf
+      tags:
+       - nginx
+
+    - name: configure nginx default
+      template: src=configs/nginx-conf/default.j2 dest=/etc/nginx/sites-enabled/default
+      tags:
+        - nginx
+
+    - name: Create global directory for nginx config files
+      file: state=directory path=/etc/nginx/global owner=root group=root mode=0644
+
+    - name: Add nginx restrictions file
+      template: src=configs/nginx-conf/restrictions.j2 dest=/etc/nginx/global/restrictions.conf owner=root group=root mode=0644 
+      tags:
+        - nginx
+
+    - name: Add Wordpress specific configuration file
+      template: src=configs/nginx-conf/wordpress.j2 dest=/etc/nginx/global/wordpress.conf owner=root group=root mode=0644
+      tags:
+        - nginx
+
+    - name: setup custom.roadsideweb.com
+      template: src=configs/nginx-conf/custom.roadsideweb.com.j2 dest=/etc/nginx/sites-enabled/custom.roadsideweb.com owner=root group=root mode=0644
+      tags:
+        - nginx
+
+
+
+
+    # - name: Set phpfpm to listen on TCP port instead of unix socket
+    #   lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = /var/run/php5-fpm.sock' line='listen = 127.0.0.1:9000'"
+
+    - name: Set phpfpm to listen on unix socket instead of TCP port
+      lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = 127.0.0.1:9000' line='listen = /var/run/php5-fpm.sock'"
+
+    - name: Turn on PHP error reporting
+      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^display_errors = Off' line='display_errors = On'"
+
+    # WP Fix im php.ini 
+    # See: http://codex.wordpress.org/Nginx
+    - name: Turn off cgi.fix_pathinfo for WP compatability
+      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^;cgi.fix_pathinfo=1' line='cgi.fix_pathinfo = 0;'"
+
+
+
+    - name: Create database user
+      action: mysql_user user=wp_user password=12345 priv=*.*:ALL state=present
+
+    - name: Create database
+      action: mysql_db db=wp_db state=present
 
     # - name: install mysql
     #   command: mysql_secure_installation
@@ -104,27 +157,23 @@
         # lineinfile: dest={{ sudoers_path }} create=yes regexp="vagrant"
         # line="vagrant ALL=NOPASSWD:ALL" state=present
 
+    # - name: set up working directory
+    #   command: mkdir -p /var/www/{$whoami.stdout}/public/
 
 
-    - name: set up working directory
-      command: mkdir -p /var/www/{$whoami.stdout}/public/
-      tags:
-        - mysql
+    ## this nginx configuring is untested, comment out if destruction ensues
+    # - name: nginx configuring
+    #   command: cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.orig
+    #   command: sudo sed -i '/index index.html index.htm;/c\index index.html index.htm index.php;' /etc/nginx/sites-available/default
+    #   command: sudo echo "location ~ .php$ { fastcgi_split_path_info ^(.+.php)(/.+)$; fastcgi_pass unix:/var/run/php5-fpm.sock; fastcgi_index index.php; include fastcgi_params; }" /etc/nginx/sites-available/default
+    #   tags:
+    #     - nginx
 
-
-        ## this nginx configuring is untested, comment out if destruction ensues
-    - name: nginx configuring
-      command: cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.orig
-      command: sudo sed -i '/index index.html index.htm;/c\index index.html index.htm index.php;' /etc/nginx/sites-available/default
-      command: sudo echo "location ~ .php$ { fastcgi_split_path_info ^(.+.php)(/.+)$; fastcgi_pass unix:/var/run/php5-fpm.sock; fastcgi_index index.php; include fastcgi_params; }" /etc/nginx/sites-available/default
-      tags:
-        - nginx
-
-    - name: enable php-fpm socket
-      command: cp /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.orig
-      command: sudo sed -i '/listen = 127.0.0.1:9000/c\listen = \/var\/run\/php5-fpm.sock' /etc/php5/fpm/pool.d/www.conf
-      tags:
-        - php
+    # - name: enable php-fpm socket
+    #   command: cp /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.orig
+    #   command: sudo sed -i '/listen = 127.0.0.1:9000/c\listen = \/var\/run\/php5-fpm.sock' /etc/php5/fpm/pool.d/www.conf
+    #   tags:
+    #     - php
 
 
     - name: install composer/pomander

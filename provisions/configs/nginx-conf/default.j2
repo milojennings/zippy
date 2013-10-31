@@ -1,40 +1,59 @@
 server {
-   listen 80;
-   server_name custom.roadsideweb.com;
-   root /var/www/custom.roadsideweb.com/public_html;
-   if ($http_host != "custom.roadsideweb.com") {
-             rewrite ^ http://custom.roadsideweb.com$request_uri permanent;
-   }
-   index index.php index.html;
-   location = /favicon.ico {
-            log_not_found off;
-            access_log off;
-   }
-   location = /robots.txt {
-            allow all;
-            log_not_found off;
-            access_log off;
-   }
-   # Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
-   location ~ /\. {
-            deny all;
-            access_log off;
-            log_not_found off;
-   }
-   location / {
-            try_files $uri $uri/ /index.php?$args;
-   }
-   # Add trailing slash to */wp-admin requests.s
-   rewrite /wp-admin$ $scheme://$host$uri/ permanent;
-   location ~*  \.(jpg|jpeg|png|gif|css|js|ico)$ {
-            expires max;
-            log_not_found off;
-   }
-   location ~ \.php$ {
-            try_files $uri =404;
-            include /etc/nginx/fastcgi_params;
-            fastcgi_pass unix:/var/run/php5-fpm.sock;
-            fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-   }
+
+    root /var/www/custom.roadsideweb.dev/public_html;
+    index index.html index.htm index.php;
+
+    # Make site accessible from http://localhost/
+    server_name localhost;
+
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to index.html
+        try_files $uri $uri/ /index.php;
+        # Uncomment to enable naxsi on this location
+        # include /etc/nginx/naxsi.rules
+    }
+
+    location /doc/ {
+        alias /usr/share/doc/;
+        autoindex on;
+        allow 127.0.0.1;
+        deny all;
+    }
+
+    # Only for nginx-naxsi : process denied requests
+    #location /RequestDenied {
+        # For example, return an error code
+        #return 418;
+    #}
+
+    #error_page 404 /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    #error_page 500 502 503 504 /50x.html;
+    #location = /50x.html {
+    #   root /usr/share/nginx/www;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    location ~ \.php$ {
+       fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    #   # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+    #
+    #   # With php5-cgi alone:
+    #   fastcgi_pass 127.0.0.1:9000;
+       # With php5-fpm:
+       fastcgi_pass unix:/var/run/php5-fpm.sock;
+       fastcgi_index index.php;
+       include fastcgi_params;
+    }
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #   deny all;
+    #}
 }

@@ -22,6 +22,8 @@ current command set to get rockin' (you need: ansible, git, vagrant & virtualbox
 
 git clone https://github.com/milojennings/zippy.git
 cd zippy
+vagrant plugin install vagrant-vbguest
+vagrant plugin install vagrant-cachier
 vagrant box add precise64 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
 vagrant up
 

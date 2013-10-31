@@ -1,0 +1,42 @@
+# Generic startup file.
+# user {user} {group};
+
+# usually equal to number of CPU's you have. run command "grep processor /proc/cpuinfo | wc -l" to find it
+worker_processes 1;
+
+error_log  /var/log/nginx/error.log;
+pid        /var/run/nginx.pid;
+
+# Keeps the logs free of messages about not being able to bind().
+#daemon     off;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+#   rewrite_log on;
+
+    include mime.types;
+    default_type       application/octet-stream;
+    access_log         /var/log/nginx/access.log;
+    sendfile           on;
+#   tcp_nopush         on;
+    keepalive_timeout  3;
+#   tcp_nodelay        on;
+#   gzip               on;
+
+    #php max upload limit cannot be larger than this       
+    client_max_body_size 13m;
+    index index.php index.html index.htm;
+
+    # Upstream to abstract backend connection(s) for PHP.
+    upstream php {
+        #this should match value of "listen" directive in php-fpm pool
+        # server unix:/tmp/php-fpm.sock;
+        server unix:/var/run/php5-fpm.sock;
+        #server 127.0.0.1:9000;
+    }
+
+    include sites-enabled/*;
+}
