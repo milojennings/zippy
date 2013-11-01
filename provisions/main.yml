@@ -105,10 +105,23 @@
 
 
 
+        ## this currently causes a known issue in ansible, fix coming soon
+    # - name: configure php5 www.conf default
+    #   template: src=configs/php-conf/www dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
+    #   tags:
+    #     - php
+
+    - name: change mysql to low memory settings
+      template: src=configs/mysql-conf/my.j2 dest=/etc/mysql/my.cnf owner=root group=root mode=0644
+      tags:
+        - nginx
+
 
     # - name: Set phpfpm to listen on TCP port instead of unix socket
     #   lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = /var/run/php5-fpm.sock' line='listen = 127.0.0.1:9000'"
 
+
+      # not necessary with rewritten www.conf
     - name: Set phpfpm to listen on unix socket instead of TCP port
       lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = 127.0.0.1:9000' line='listen = /var/run/php5-fpm.sock'"
 
@@ -120,13 +133,13 @@
     - name: Turn off cgi.fix_pathinfo for WP compatability
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^;cgi.fix_pathinfo=1' line='cgi.fix_pathinfo = 0;'"
 
-    - name: Increase maximum upload size to 64mb for wordpress
+    - name: increase maximum upload size to 64mb for wordpress
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^upload_max_filesize = 2M' line='upload_max_filesize = 64M;'"
 
-    - name: Increase maximum post size to 64mb for wordpress
+    - name: increase maximum post size to 64mb for wordpress
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^post_max_size = 8M' line='post_max_size = 64M;'"
 
-    - name: Copy php.ini to wp-admin folder
+    - name: copy php.ini to wp-admin folder
       command: cp /etc/php5/fpm/php.ini /var/www/custom.roadsideweb.dev/public_html/wp-admin/
 
 
