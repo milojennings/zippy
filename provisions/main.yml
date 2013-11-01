@@ -107,7 +107,7 @@
 
         ## this currently causes a known issue in ansible, fix coming soon
     # - name: configure php5 www.conf default
-    #   template: src=configs/php-conf/www dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
+    #   template: src=configs/php-conf/www.j2 dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
     #   tags:
     #     - php
 
