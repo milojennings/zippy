@@ -1,8 +1,10 @@
 # Generic startup file.
-# user {user} {group};
+user www-data;
 
 # usually equal to number of CPU's you have. run command "grep processor /proc/cpuinfo | wc -l" to find it
-worker_processes 1;
+# 2 on the vagrantup precise64 box
+worker_processes 2;
+worker_cpu_affinity 0101 1010;
 
 error_log  /var/log/nginx/error.log;
 pid        /var/run/nginx.pid;
@@ -11,7 +13,7 @@ pid        /var/run/nginx.pid;
 #daemon     off;
 
 events {
-    worker_connections  1024;
+    worker_connections  2048;
 }
 
 http {
@@ -21,10 +23,10 @@ http {
     default_type         application/octet-stream;
     access_log           /var/log/nginx/access.log;
     sendfile             on;
-#   tcp_nopush           on;
-    keepalive_timeout     3;
-#   tcp_nodelay          on;
-#   gzip                 on;
+    tcp_nopush           on;
+    keepalive_timeout     5;
+    tcp_nodelay          on;
+    gzip                 on;
 
     #php max upload limit cannot be larger than this
     client_max_body_size 128M;
