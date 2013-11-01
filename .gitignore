@@ -1,5 +1,7 @@
 # ignore .vagrant folder, as it is auto-generated
 .vagrant
+vagrant_ansible_inventory_default
+
 vhosts/custom.roadsideweb.dev/public_html/wp-content/uploads
 
 
