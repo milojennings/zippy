@@ -121,6 +121,14 @@
     - name: Turn off cgi.fix_pathinfo for WP compatability
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^;cgi.fix_pathinfo=1' line='cgi.fix_pathinfo = 0;'"
 
+    - name: Increase maximum upload size to 64mb for wordpress
+      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^upload_max_filesize = 2M' line='upload_max_filesize = 64M;'"
+
+    - name: Increase maximum post size to 64mb for wordpress
+      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^post_max_size = 8M' line='post_max_size = 64M;'"
+
+    - name: Copy php.ini to wp-admin folder
+      command: cp /etc/php5/fpm/php.ini /var/www/custom.roadsideweb.dev/public_html/wp-admin/
 
 
     - name: Create database user
