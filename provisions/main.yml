@@ -45,8 +45,11 @@
         - nginx
         - php5-fpm
         - php5-mysql
-        # - php5-cli
-        # - php5-mcrypt
+        - php5-cli
+        - php5-curl
+        - php5-mcrypt
+        - php5-mysqlnd
+        - php5-sqlite
         # - dnsmasq
       tags:
         - apt
@@ -176,13 +179,13 @@
     #     - php
 
 
-    - name: install composer/pomander
-      command: curl -s https://getcomposer.org/installer | php
-      command: sudo mv composer.phar /usr/local/bin/composer
-      command: composer global require pomander/pomander:@stable
-      command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
-      tags:
-        - pomander
+    # - name: install composer/pomander
+    #   command: curl -s https://getcomposer.org/installer | php
+    #   command: sudo mv composer.phar /usr/local/bin/composer
+    #   command: composer global require pomander/pomander:@stable
+    #   command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+    #   tags:
+    #     - pomander
 
 
 
