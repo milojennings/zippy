@@ -2,10 +2,18 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Set variables so scripts can know where they are executing from
+dir = Dir.pwd
+vagrant_dir = File.expand_path(File.dirname(__FILE__))
+
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Store the current version of Vagrant for use in conditionals when dealing
+  # with possible backward compatible issues.
+  vagrant_version = Vagrant::VERSION.sub(/^v/, '')
 
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
@@ -67,6 +75,42 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
 
+  # Local Machine Hosts
+  #
+  # Harvested from: https://github.com/10up/varying-vagrant-vagrants/blob/master/Vagrantfile
+  #
+  # If the Vagrant plugin hostsupdater (https://github.com/cogitatio/vagrant-hostsupdater) is
+  # installed, the following will automatically configure your local machine's hosts file to
+  # be aware of the domains specified below. Watch the provisioning script as you may be
+  # required to enter a password for Vagrant to access your hosts file.
+  
+  if defined? VagrantPlugins::HostsUpdater
+
+    # Capture the paths to all vvv-hosts files under the www/ directory.
+    paths = [vagrant_dir + '/vhosts/vhosts']
+    # Dir.glob(vagrant_dir + '/vhosts/vhosts').each do |path|
+    #   paths << path
+    # end
+
+    # Parse through the vvv-hosts files in each of the found paths and put the hosts
+    # that are found into a single array.
+    hosts = []
+    paths.each do |path|
+      new_hosts = []
+      file_hosts = IO.read(vagrant_dir + '/vhosts/vhosts').split( "\n" )
+      file_hosts.each do |line|
+        if line[0..0] != "#"
+          new_hosts << line
+        end
+      end
+      hosts.concat new_hosts
+    end
+
+    # Pass the final hosts array to the hostsupdate plugin so it can perform magic.
+    config.hostsupdater.aliases = hosts
+
+  end
+  
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
   # config.ssh.forward_agent = true
