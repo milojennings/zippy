@@ -16,7 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   vagrant_version = Vagrant::VERSION.sub(/^v/, '')
 
   config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 
   # Build a local cache of apt packages to save time rebuilding VM
   # Requires https://github.com/fgrehm/vagrant-cachier
@@ -34,6 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Settings for vbguest plugin
   config.vbguest.auto_update = true
   config.vbguest.no_remote = false
+  config.vbguest.installer = "CloudUbuntuVagrant"
 
   # Drive mapping
   #

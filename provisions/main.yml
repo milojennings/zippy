@@ -27,7 +27,7 @@
 
   #   # combined install of these packages as vagrant reconnects for each task (this should speed things up!)
     - name: install dev pkgs / EMP stack
-      apt: pkg=$item
+      apt: pkg={{ item }}
       with_items:
         - build-essential
         - linux-generic 
@@ -37,6 +37,7 @@
         # - python-setuptools
         - curl
         - vim
+        - htop
         - git-core
         - mysql-server
         - mysql-client
@@ -105,11 +106,11 @@
 
 
 
-        ## this currently causes a known issue in ansible, fix coming soon
-    # - name: configure php5 www.conf default
-    #   template: src=configs/php-conf/www.j2 dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
-    #   tags:
-    #     - php
+        # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
+    - name: configure php5 www.conf default
+      template: src=configs/php-conf/www.j2 dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
+      tags:
+        - php
 
     - name: change mysql to low memory settings
       template: src=configs/mysql-conf/my.j2 dest=/etc/mysql/my.cnf owner=root group=root mode=0644
@@ -121,9 +122,9 @@
     #   lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = /var/run/php5-fpm.sock' line='listen = 127.0.0.1:9000'"
 
 
-      # not necessary with rewritten www.conf
-    - name: Set phpfpm to listen on unix socket instead of TCP port
-      lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = 127.0.0.1:9000' line='listen = /var/run/php5-fpm.sock'"
+    #   # not necessary with rewritten www.conf
+    # - name: Set phpfpm to listen on unix socket instead of TCP port
+    #   lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = 127.0.0.1:9000' line='listen = /var/run/php5-fpm.sock'"
 
     - name: Turn on PHP error reporting
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^display_errors = Off' line='display_errors = On'"

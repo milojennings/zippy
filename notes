@@ -11,7 +11,7 @@
 vagrantbox.es has a list of vagrant boxes available
 
 We will use this for now:
-http://files.vagrantup.com/precise64.box
+http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
 
 We may consider upgrading to the next Ubuntu LTS release when that arrives (14.04)
 
@@ -25,7 +25,7 @@ git clone https://github.com/milojennings/zippy.git
 cd zippy
 vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-cachier
-vagrant box add precise64 http://files.vagrantup.com/precise64.box
+vagrant box add precise64 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
 vagrant up
 
 
