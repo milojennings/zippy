@@ -33,7 +33,7 @@ vagrant up
 
 vagrant up only needs to be done once (unless you reboot), vagrant provision should be used if changes are made in ansible, use vagrant reload if changes are made to the Vagrantfile
 
-note that vbguest will bark back an error:
+note that vbguest may bark back an error:
 
   Installing the Window System drivers ...fail!
   (Could not find the X.Org or XFree86 Window System.)
