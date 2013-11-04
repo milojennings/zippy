@@ -23,6 +23,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
+  # Settings for vbguest plugin
+  config.vbguest.auto_update = true
+  config.vbguest.no_remote = false
 
   # Drive mapping
   #
