@@ -2,7 +2,7 @@
 
 - hosts: all
   user: vagrant
-  sudo: true
+  sudo: false
 
   # vars:
   #   PORT_NUM: 6543
@@ -20,13 +20,19 @@
   #   # by having a tag we can narrow down a specific group of tasks
   #   # during configuration.
     - name: update cache / upgrade pkgs
+      sudo: true
       apt: update_cache=yes upgrade=dist cache_valid_time=3600
       tags:
         - apt
-## sudo apt-get install nginx-full php5-fpm php5-cli php5-mcrypt php5-mysql mysql-server dnsmasq
+
+    # - name: allow bash profile to be loaded by ssh
+    #   sudo: false
+    #   lineinfile: dest=~/.bashrc regexp='[ -z "$PS1" ] && return' line='# [ -z "$PS1" ] && return' state=present
+    #   # when: {{ ansible_pkg_mgr }} == "apt"
 
   #   # combined install of these packages as vagrant reconnects for each task (this should speed things up!)
     - name: install dev pkgs / EMP stack
+      sudo: true
       apt: pkg={{ item }}
       with_items:
         - build-essential
@@ -77,29 +83,35 @@
          # - ansible
 
     - name: configure nginx startup
+      sudo: true
       template: src=configs/nginx-conf/nginx.j2 dest=/etc/nginx/nginx.conf
       tags:
        - nginx
 
     - name: configure nginx default
+      sudo: true
       template: src=configs/nginx-conf/default.j2 dest=/etc/nginx/sites-enabled/default
       tags:
         - nginx
 
     - name: Create global directory for nginx config files
+      sudo: true
       file: state=directory path=/etc/nginx/global owner=root group=root mode=0644
 
     - name: Add nginx restrictions file
+      sudo: true
       template: src=configs/nginx-conf/restrictions.j2 dest=/etc/nginx/global/restrictions.conf owner=root group=root mode=0644 
       tags:
         - nginx
 
     - name: Add Wordpress specific configuration file
+      sudo: true
       template: src=configs/nginx-conf/wordpress.j2 dest=/etc/nginx/global/wordpress.conf owner=root group=root mode=0644
       tags:
         - nginx
 
     - name: setup custom.roadsideweb.com
+      sudo: true
       template: src=configs/nginx-conf/custom.roadsideweb.com.j2 dest=/etc/nginx/sites-enabled/custom.roadsideweb.com owner=root group=root mode=0644
       tags:
         - nginx
@@ -108,11 +120,13 @@
 
         # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
     - name: configure php5 www.conf default
+      sudo: true
       template: src=configs/php-conf/www.j2 dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
       tags:
         - php
 
     - name: change mysql to low memory settings
+      sudo: true
       template: src=configs/mysql-conf/my.j2 dest=/etc/mysql/my.cnf owner=root group=root mode=0644
       tags:
         - nginx
@@ -127,20 +141,25 @@
     #   lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = 127.0.0.1:9000' line='listen = /var/run/php5-fpm.sock'"
 
     - name: Turn on PHP error reporting
+      sudo: true
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^display_errors = Off' line='display_errors = On'"
 
     # WP Fix im php.ini 
     # See: http://codex.wordpress.org/Nginx
     - name: Turn off cgi.fix_pathinfo for WP compatability
+      sudo: true
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^;cgi.fix_pathinfo=1' line='cgi.fix_pathinfo = 0;'"
 
     - name: increase maximum upload size to 64mb for wordpress
+      sudo: true
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^upload_max_filesize = 2M' line='upload_max_filesize = 64M;'"
 
     - name: increase maximum post size to 64mb for wordpress
+      sudo: true
       lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^post_max_size = 8M' line='post_max_size = 64M;'"
 
     - name: copy php.ini to wp-admin folder
+      sudo: true
       command: cp /etc/php5/fpm/php.ini /var/www/custom.roadsideweb.dev/public_html/wp-admin/
 
 
@@ -200,11 +219,46 @@
     #     - php
 
 
-    # - name: install composer/pomander
-    #   command: curl -s https://getcomposer.org/installer | php
-    #   command: sudo mv composer.phar /usr/local/bin/composer
-    #   command: composer global require pomander/pomander:@stable
-    #   command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+    - name: install composer
+      sudo: false
+      action: shell curl -s https://getcomposer.org/installer | php
+      # command: wget http://getcomposer.org/composer.phar
+      tags:
+        - pomander
+
+    - name: move composer executable to /usr/local/bin
+      sudo: false
+      command: sudo mv composer.phar /usr/local/bin/composer
+      tags:
+        - pomander
+
+    - name: install pomander
+      sudo: false
+      command: composer global require pomander/pomander:@stable
+      tags:
+        - pomander
+
+    - name: install pomander-wordpress
+      sudo: false
+      command: composer global require pomander/wordpress:@stable
+      # command: touch ~/.bash_profile
+      tags:
+        - pomander
+
+    - name: create symlink for pomander
+      sudo: true
+      file: src=/home/vagrant/.composer/vendor/bin/pom dest=/usr/local/bin/pom state=link
+    
+    - name: add composer/pomander to path
+      sudo: false
+      command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bash_profile
+      # command: exit
+      tags:
+        - pomander
+
+    # - name: reload bash for pomander
+    #   sudo: true
+    #   action: shell bash
     #   tags:
     #     - pomander
 
@@ -212,12 +266,14 @@
 
 
     - name: restart nginx
+      sudo: true
       service: name=nginx state=restarted
       tags:
         - nginx
 
 
     - name: restart php-fpm
+      sudo: true
       service: name=php5-fpm state=restarted
       tags:
         - php
