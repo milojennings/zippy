@@ -123,7 +123,7 @@
 
     - name: copy php.ini to wp-admin folder
       sudo: true
-      file: src=/etc/php5/fpm/php.ini dest=/var/www/custom.roadsideweb.dev/public_html/wp-admin/
+      file: src=/etc/php5/fpm/php.ini dest=/var/www/custom.roadsideweb.dev/public_html/wordpress/wp-admin/
 
 
     #     # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
@@ -147,35 +147,35 @@
       # not necessary with rewritten www.conf
     - name: Set phpfpm to listen on unix socket instead of TCP port
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf
+      lineinfile: dest=/etc/php5/fpm/pool.d/www.conf
         regexp='^listen = 127.0.0.1:9000'
-        line='listen = /var/run/php5-fpm.sock'"
+        line='listen = /var/run/php5-fpm.sock'
 
     - name: Turn on PHP error reporting
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini
+      lineinfile: dest=/etc/php5/fpm/php.ini
         regexp='^display_errors = Off'
-        line='display_errors = On'"
+        line='display_errors = On'
 
     # WP Fix im php.ini 
     # See: http://codex.wordpress.org/Nginx
     - name: Turn off cgi.fix_pathinfo for WP compatability
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini
+      lineinfile: dest=/etc/php5/fpm/php.ini
         regexp='^;cgi.fix_pathinfo=1'
-        line='cgi.fix_pathinfo = 0;'"
+        line='cgi.fix_pathinfo = 0;'
 
     - name: increase maximum upload size to 64mb for wordpress
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini
+      lineinfile: dest=/etc/php5/fpm/php.ini
         regexp='^upload_max_filesize = 2M'
-        line='upload_max_filesize = 64M;'"
+        line='upload_max_filesize = 64M;'
 
     - name: increase maximum post size to 64mb for wordpress
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini
+      lineinfile: dest=/etc/php5/fpm/php.ini
         regexp='^post_max_size = 8M'
-        line='post_max_size = 64M;'"
+        line='post_max_size = 64M;'
 
 
     # - name: Create database user
@@ -235,7 +235,7 @@
 
 
     - name: install composer
-      sudo: false
+      sudo: true
       action: shell curl -s https://getcomposer.org/installer | php
       # command: wget http://getcomposer.org/composer.phar
       tags:
@@ -249,37 +249,30 @@
         - pomander
 
     - name: install pomander
-      sudo: false
+      sudo: true
       command: composer global require pomander/pomander:@stable
       tags:
         - pomander
 
     - name: install pomander-wordpress
-      sudo: false
+      sudo: true
       command: composer global require pomander/wordpress:@stable
       tags:
         - pomander
 
     - name: create symlink for pomander
       sudo: true
-      file: src=/home/vagrant/.composer/vendor/bin/pom dest=/usr/local/bin/pom state=link
+      file: src=/root/.composer/vendor/bin/pom dest=/usr/local/bin/pom state=link
 
-    - name: add composer/pomander to path
-      sudo: false
-      lineinfile: dest=~/.bash_profile
-        regexp=''
-        state=present
-        insertafter=EOF
-        create=yes
-        line="$HOME/.composer/vendor/bin:$PATH"
-      # command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bash_profile
-      # command: exit
-      tags:
-        - pomander
-
-    # - name: reload bash for pomander
+    # - name: add composer/pomander to path
     #   sudo: true
-    #   action: shell bash
+    #   lineinfile: dest=/root/.bash_profile
+    #     regexp=''
+    #     state=present
+    #     insertafter=EOF
+    #     create=yes
+    #     line=$HOME/.composer/vendor/bin:$PATH
+    #   ### command: echo 'export PATH=$HOME/.composer/vendor/bin:$PATH' >> ~/.bash_profile
     #   tags:
     #     - pomander
 
@@ -298,4 +291,19 @@
       service: name=php5-fpm state=restarted
       tags:
         - php
+
+    - name: change to pomander directory
+      action: shell cd /var/www/pomander && sudo pom deploy:wordpress
+      tags:
+        -pomander
+
+    # - name: deploy wordpress with pomander
+    #   command: sudo pom deploy:wordpress
+    #   tags:
+    #     -pomander
+
+
+    # - name: run pomander
+    #   sudo: true
+    #   command: 
 

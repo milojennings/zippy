@@ -20,6 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Build a local cache of apt packages to save time rebuilding VM
   # Requires https://github.com/fgrehm/vagrant-cachier
+  ### i'm not sure this is faster  ## -ryan
   # config.cache.enable :apt
 
   config.vm.network :private_network, ip: "11.22.33.44"
