@@ -10,13 +10,13 @@ The current target is Ubuntu LTS releases running wordpress.
 ##Notes!
 ---
 
-            .--. 
-           |o_o | 
-           |:_/ | 
-          //   \ \ 
-         (|     | ) 
-        /'\_   _/`\ 
-        \___)=(___/ 
+            .--.           ____________     _        _      _       _
+           |o_o |         |_____  _____|   | |      | |    \ \     / /
+           |:_/ |              |  |        | |      | |     \ \   / /
+          //   \ \             |  |        | |      | |      \_\_/_/
+         (|     | )            |  |        | |      | |      / / \ \
+        /'\_   _/`\            |  |        | |______| |     / /   \ \
+        \___)=(___/            |__|        |__________|    /_/     \_\
 
 
 http://vagrantbox.es has a list of vagrant boxes available
