@@ -50,7 +50,11 @@ current command set to get rockin' (you need: ansible (1.4.x), git, vagrant & vi
 
 ###################
 
-vagrant up only needs to be done once (unless you reboot), vagrant provision should be used if changes are made in ansible, use vagrant reload if changes are made to the Vagrantfile
+###Vagrant usage:
+
+-vagrant up only needs to be done once (unless you reboot)
+-use vagrant provision if changes are made to the ansible playbook(s)
+-use vagrant reload if changes are made to the Vagrantfile
 
 note that vbguest may bark back an error:
 
