@@ -19,17 +19,19 @@ The current target is Ubuntu LTS releases running wordpress.
         \___)=(___/ 
 
 
-vagrantbox.es has a list of vagrant boxes available
+http://vagrantbox.es has a list of vagrant boxes available
 
 We currently use this box:
     http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
 
 You may run this command to add the box manually, but vagrant up will download and enable it for you:
+
     vagrant box add precise64 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
 
 We may consider upgrading to the next Ubuntu LTS release when that arrives (14.04)
 
 To install ansible from git use:
+
     sudo pip install git+https://github.com/ansible/ansible.git
 
 
