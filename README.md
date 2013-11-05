@@ -54,6 +54,6 @@ note that vbguest may bark back an error:
 
     Installing the Window System drivers ...fail!
     (Could not find the X.Org or XFree86 Window System.)
-    An error occurred during installation of VirtualBox Guest Additions 4.3.0. Some functionality may not work as intended.
+    An error occurred during installation of VirtualBox Guest Additions ...
 
 There is nothing to worry about though, as our server is headless (display server is not used).
