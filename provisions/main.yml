@@ -43,6 +43,7 @@
         # - python-setuptools
         - nfs-common
         - nfs-kernel-server
+        - rpcbind
         - curl
         - vim
         - htop
@@ -120,12 +121,17 @@
 
 
 
-        # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
-    - name: configure php5 www.conf default
+    - name: copy php.ini to wp-admin folder
       sudo: true
-      template: src=configs/php-conf/www.j2 dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
-      tags:
-        - php
+      file: src=/etc/php5/fpm/php.ini dest=/var/www/custom.roadsideweb.dev/public_html/wp-admin/
+
+
+    #     # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
+    # - name: configure php5 www.conf default
+    #   sudo: true
+    #   template: src=configs/php-conf/www.j2 dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644 
+    #   tags:
+    #     - php
 
     - name: change mysql to low memory settings
       sudo: true
@@ -138,38 +144,45 @@
     #   lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = /var/run/php5-fpm.sock' line='listen = 127.0.0.1:9000'"
 
 
-    #   # not necessary with rewritten www.conf
-    # - name: Set phpfpm to listen on unix socket instead of TCP port
-    #   lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = 127.0.0.1:9000' line='listen = /var/run/php5-fpm.sock'"
+      # not necessary with rewritten www.conf
+    - name: Set phpfpm to listen on unix socket instead of TCP port
+      sudo: true
+      lineinfile: "dest=/etc/php5/fpm/pool.d/www.conf
+        regexp='^listen = 127.0.0.1:9000'
+        line='listen = /var/run/php5-fpm.sock'"
 
     - name: Turn on PHP error reporting
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^display_errors = Off' line='display_errors = On'"
+      lineinfile: "dest=/etc/php5/fpm/php.ini
+        regexp='^display_errors = Off'
+        line='display_errors = On'"
 
     # WP Fix im php.ini 
     # See: http://codex.wordpress.org/Nginx
     - name: Turn off cgi.fix_pathinfo for WP compatability
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^;cgi.fix_pathinfo=1' line='cgi.fix_pathinfo = 0;'"
+      lineinfile: "dest=/etc/php5/fpm/php.ini
+        regexp='^;cgi.fix_pathinfo=1'
+        line='cgi.fix_pathinfo = 0;'"
 
     - name: increase maximum upload size to 64mb for wordpress
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^upload_max_filesize = 2M' line='upload_max_filesize = 64M;'"
+      lineinfile: "dest=/etc/php5/fpm/php.ini
+        regexp='^upload_max_filesize = 2M'
+        line='upload_max_filesize = 64M;'"
 
     - name: increase maximum post size to 64mb for wordpress
       sudo: true
-      lineinfile: "dest=/etc/php5/fpm/php.ini regexp='^post_max_size = 8M' line='post_max_size = 64M;'"
-
-    - name: copy php.ini to wp-admin folder
-      sudo: true
-      command: cp /etc/php5/fpm/php.ini /var/www/custom.roadsideweb.dev/public_html/wp-admin/
+      lineinfile: "dest=/etc/php5/fpm/php.ini
+        regexp='^post_max_size = 8M'
+        line='post_max_size = 64M;'"
 
 
-    - name: Create database user
-      action: mysql_user user=wp_user password=12345 priv=*.*:ALL state=present
+    # - name: Create database user
+    #   action: mysql_user user=wp_user password=12345 priv=*.*:ALL state=present
 
-    - name: Create database
-      action: mysql_db db=wp_db state=present
+    # - name: Create database
+    #   action: mysql_db db=wp_db state=present
 
     # - name: install mysql
     #   command: mysql_secure_installation
@@ -229,7 +242,8 @@
         - pomander
 
     - name: move composer executable to /usr/local/bin
-      sudo: false
+      sudo: true
+      # copy: src=/home/vagrant/composer.phar dest=/usr/local/bin/composer
       command: sudo mv composer.phar /usr/local/bin/composer
       tags:
         - pomander
@@ -243,7 +257,6 @@
     - name: install pomander-wordpress
       sudo: false
       command: composer global require pomander/wordpress:@stable
-      # command: touch ~/.bash_profile
       tags:
         - pomander
 
@@ -253,7 +266,13 @@
 
     - name: add composer/pomander to path
       sudo: false
-      command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bash_profile
+      lineinfile: dest=~/.bash_profile
+        regexp=''
+        state=present
+        insertafter=EOF
+        create=yes
+        line="$HOME/.composer/vendor/bin:$PATH"
+      # command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bash_profile
       # command: exit
       tags:
         - pomander

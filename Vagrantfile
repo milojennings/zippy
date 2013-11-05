@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Build a local cache of apt packages to save time rebuilding VM
   # Requires https://github.com/fgrehm/vagrant-cachier
-  config.cache.enable :apt
+  # config.cache.enable :apt
 
   config.vm.network :private_network, ip: "11.22.33.44"
   config.vm.network :forwarded_port, guest: 80, host: 8080
@@ -48,7 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # /var/www/
   config.vm.synced_folder "vhosts/", "/var/www/", owner: "www-data"
-  # config.vm.synced_folder "vhosts/", "/var/www/", :nfs => true
+  # config.vm.synced_folder "vhosts/", "/var/www/", nfs: true
 
 
   # # ~/ ## this is broken for now
