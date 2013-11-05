@@ -41,6 +41,8 @@
         # - libevent-dev
         # - python-pip
         # - python-setuptools
+        - nfs-common
+        - nfs-kernel-server
         - curl
         - vim
         - htop
@@ -248,7 +250,7 @@
     - name: create symlink for pomander
       sudo: true
       file: src=/home/vagrant/.composer/vendor/bin/pom dest=/usr/local/bin/pom state=link
-    
+
     - name: add composer/pomander to path
       sudo: false
       command: echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bash_profile

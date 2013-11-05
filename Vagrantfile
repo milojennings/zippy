@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
-  # Settings for vbguest plugin
+  # # Settings for vbguest plugin
   config.vbguest.auto_update = true
   config.vbguest.no_remote = false
   config.vbguest.installer = "CloudUbuntuVagrant"
@@ -47,7 +47,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   # /var/www/
-  config.vm.synced_folder "vhosts/", "/var/www/", :owner => "www-data"
+  config.vm.synced_folder "vhosts/", "/var/www/", owner: "www-data"
+  # config.vm.synced_folder "vhosts/", "/var/www/", :nfs => true
+
+
+  # # ~/ ## this is broken for now
+  # config.vm.synced_folder "vagranthome/", "/home/vagrant/"
 
   # /srv/database/
   #
@@ -58,9 +63,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.synced_folder "database/", "/srv/database"
   if vagrant_version >= "1.3.0"
-    config.vm.synced_folder "database/data/", "/var/lib/mysql", :mount_options => [ "dmode=777", "fmode=777" ]
+    config.vm.synced_folder "database/data/", "/var/lib/mysql", mount_options: [ "dmode=777", "fmode=777" ]
   else
-    config.vm.synced_folder "database/data/", "/var/lib/mysql", :extra => 'dmode=777,fmode=777'
+    config.vm.synced_folder "database/data/", "/var/lib/mysql", extra: 'dmode=777,fmode=777'
   end
 
 
