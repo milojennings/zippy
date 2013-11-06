@@ -18,10 +18,10 @@ $env->plugins(array(
   'gravityforms' => array('dir' => 'lib/gravityforms')
 
   // fetches from git repository
-  'wp-github-activity' => array('branch' => 'origin/master' => 'git' => 'https://github.com/alexkingorg/wp-github-activity'),
-
+  // 'wp-github-activity' => array('branch' => 'origin/master' => 'git' => 'https://github.com/alexkingorg/wp-github-activity'),
+  
   // fetches from svn repository
-  'more-types' => array('version' => '2.1', 'svn' => 'http://plugins.svn.wordpress.org/more-fields' )
+  // 'more-types' => array('version' => '2.1', 'svn' => 'http://plugins.svn.wordpress.org/more-fields' )
 
 ));
 
