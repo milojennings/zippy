@@ -4,7 +4,7 @@ Zippy is a practical application of Vagrant and Ansible, for portable auto-deplo
 
 The idea is a zero-to-hero LNMP stack running from vagrant up.
 
-The current target is Ubuntu LTS releases running wordpress.
+The current target is Ubuntu LTS releases (Debian stable for the dev branch) running wordpress.
 
 ---
 ##Notes!
@@ -21,14 +21,20 @@ The current target is Ubuntu LTS releases running wordpress.
 
 http://vagrantbox.es has a list of vagrant boxes available
 
-We currently use this box:
+We currently use these boxes:
+
+    ##master
     http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
+    ##dev
+    http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210-nocm.box
 
 You may run this command to add the box manually, but vagrant up will download and enable it for you:
 
+    ##master
     vagrant box add precise64 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
+    ##dev
+    vagrant box add wheezy64 http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210-nocm.box
 
-We may consider upgrading to the next Ubuntu LTS release when that arrives (14.04)
 
 To install ansible from git use:
 
