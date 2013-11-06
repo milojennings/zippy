@@ -70,3 +70,17 @@ note that vbguest may bark back an error:
     An error occurred during installation of VirtualBox Guest Additions ...
 
 There is nothing to worry about though, as our server is headless (display server is not used).
+
+
+If you are getting this error on Mac OS:
+
+    Progress state: NS_ERROR_FAILURE
+    VBoxManage: error: Failed to create the host-only adapter
+    VBoxManage: error: VBoxNetAdpCtl:
+    Error while adding new interface: failed to open /dev/vboxnetctl: No such file or directory
+
+Try running this:
+
+    sudo /Library/StartupItems/VirtualBox/VirtualBox restart
+
+---
