@@ -28,10 +28,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ### i'm not sure this is faster  ## -ryan
   # config.cache.enable :apt
 
-  ## 10.0.0.0 to 10.255.255.255 are reserved for private networks, best to use one of those
-  config.vm.network :private_network, ip: "10.20.30.40"
-  config.vm.network :forwarded_port, guest: 80, host: 8080
-
   config.vm.provider :virtualbox do |vb|
     #   # Don't boot with headless mode
     #   vb.gui = true
@@ -39,6 +35,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
+
+  ## 10.0.0.0 to 10.255.255.255 are reserved for private networks, best to use one of those
+  config.vm.network :private_network, ip: "10.20.30.40"
+  config.vm.network :forwarded_port, guest: 80, host: 8080
 
   # # Settings for vbguest plugin, should not be needed for wheezy box
   # config.vbguest.auto_update = true
