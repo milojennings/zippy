@@ -9,13 +9,7 @@
 
   tasks:
 
-    # - name: WHOAMI registering
-    #   command: whoami 
-    #   sudo: false
-    #   register: whoami
 
-    # - action: shell whoami
-    #   register: whoami
 
   #   # by having a tag we can narrow down a specific group of tasks
   #   # during configuration.
@@ -36,11 +30,10 @@
       apt: pkg={{ item }}
       with_items:
         - build-essential
-        - linux-generic 
-        # - python-dev
-        # - libevent-dev
-        # - python-pip
-        # - python-setuptools
+        ## debian
+        - linux-headers-amd64
+        ## ubuntu
+        # - linux-generic
         - nfs-common
         - nfs-kernel-server
         - rpcbind
@@ -59,31 +52,14 @@
         - php5-curl
         - php5-mcrypt
         - php5-sqlite
-        # - dnsmasq
+
       tags:
         - apt
         - mysql
         - nginx
         - php
 
-    # - name: install mysql/nginx/php (EMP stack)
-    #   apt: pkg=$item
-    #   with_items:
-    #      - mysql-server
-    #      - mysql-client
-    #      - nginx
-    #      - php5-fpm 
-    #      - php5-mysql
-    #   tags:
-    #     - mysql
-    #     - nginx
 
-    # - name: pip install stuff
-    #   pip: name=$item
-    #   with_items:
-    #      - distribute
-    #      - virtualenv
-         # - ansible
 
     - name: configure nginx startup
       sudo: true
@@ -178,54 +154,6 @@
         line='post_max_size = 64M;'
 
 
-    # - name: Create database user
-    #   action: mysql_user user=wp_user password=12345 priv=*.*:ALL state=present
-
-    # - name: Create database
-    #   action: mysql_db db=wp_db state=present
-
-    # - name: install mysql
-    #   command: mysql_secure_installation
-    #   tags:
-    #     - mysql
-
-          # # VirtualBox - http://www.virtualbox.org
-          # # Run this command: wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
-            #  deb http://download.virtualbox.org/virtualbox/debian precise contrib
-
-
-      # - name: set up php-fpm
-      #   command: cp /etc/php5/fpm/pool.d/www.conf /var/www/$WHOAMI/conf/php5-fpm-pool.conf
-      #   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.off
-      #   command: ln -s /var/www/$WHOAMI/conf/php5-fpm-pool.conf /etc/php5/fpm/pool.d/$WHOAMI.conf
-      #   tags:
-      #     - php-fpm
-
-
-      # - name: install mysql
-      #   action: shell mysql_secure_installation sudo=true
-      #   tags:
-      #     - mysql
-
-              # this doesn't work yet
-        # - name: change root password
-        #   user: name=root password="password"
-
-      # - name: Ensure vagrant user is allowed to sudo
-        # lineinfile: dest={{ sudoers_path }} create=yes regexp="vagrant"
-        # line="vagrant ALL=NOPASSWD:ALL" state=present
-
-    # - name: set up working directory
-    #   command: mkdir -p /var/www/{$whoami.stdout}/public/
-
-
-    ## this nginx configuring is untested, comment out if destruction ensues
-    # - name: nginx configuring
-    #   command: cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.orig
-    #   command: sudo sed -i '/index index.html index.htm;/c\index index.html index.htm index.php;' /etc/nginx/sites-available/default
-    #   command: sudo echo "location ~ .php$ { fastcgi_split_path_info ^(.+.php)(/.+)$; fastcgi_pass unix:/var/run/php5-fpm.sock; fastcgi_index index.php; include fastcgi_params; }" /etc/nginx/sites-available/default
-    #   tags:
-    #     - nginx
 
     # - name: enable php-fpm socket
     #   command: cp /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.orig
@@ -237,13 +165,11 @@
     - name: install composer
       sudo: true
       action: shell curl -s https://getcomposer.org/installer | php
-      # command: wget http://getcomposer.org/composer.phar
       tags:
         - pomander
 
     - name: move composer executable to /usr/local/bin
       sudo: true
-      # copy: src=/home/vagrant/composer.phar dest=/usr/local/bin/composer
       command: sudo mv composer.phar /usr/local/bin/composer
       tags:
         - pomander
@@ -264,20 +190,6 @@
       sudo: true
       file: src=/root/.composer/vendor/bin/pom dest=/usr/local/bin/pom state=link
 
-    # - name: add composer/pomander to path
-    #   sudo: true
-    #   lineinfile: dest=/root/.bash_profile
-    #     regexp=''
-    #     state=present
-    #     insertafter=EOF
-    #     create=yes
-    #     line=$HOME/.composer/vendor/bin:$PATH
-    #   ### command: echo 'export PATH=$HOME/.composer/vendor/bin:$PATH' >> ~/.bash_profile
-    #   tags:
-    #     - pomander
-
-
-
 
     - name: restart nginx
       sudo: true
@@ -297,13 +209,5 @@
       tags:
         -pomander
 
-    # - name: deploy wordpress with pomander
-    #   command: sudo pom deploy:wordpress
-    #   tags:
-    #     -pomander
 
-
-    # - name: run pomander
-    #   sudo: true
-    #   command: 
 
