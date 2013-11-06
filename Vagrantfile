@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #   # Don't boot with headless mode
     #   vb.gui = true
     ## this gobble-dy-gook fixes weird errors of some host machines
-    vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
+    # vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
