@@ -48,6 +48,7 @@ current command set to get rockin' (you need: ansible (1.4.x), git, vagrant & vi
 
     git clone https://github.com/milojennings/zippy.git
     cd zippy
+    ### unfortunately vagrant plugin install can only take one argument  :-(
     vagrant plugin install vagrant-vbguest --plugin-version 0.10.0.pre0 --plugin-prerelease --plugin-source https://rubygems.org
     vagrant plugin install vagrant-cachier
     vagrant plugin install vagrant-hostsupdater
