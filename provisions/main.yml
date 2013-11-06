@@ -30,9 +30,9 @@
       apt: pkg={{ item }}
       with_items:
         - build-essential
-        ## debian
+        ## debian uses linux-headers-amd64
         - linux-headers-amd64
-        ## ubuntu
+        ## ubuntu uses linux-generic
         # - linux-generic
         - nfs-common
         - nfs-kernel-server
