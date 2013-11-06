@@ -11,10 +11,10 @@ $env->wordpress(array(
 
 $env->plugins(array(
   // fetches from plugins.wordpress.org
-  'advanced-custom-fields' => array('version' => 'latest'),
+  // 'advanced-custom-fields' => array('version' => 'latest'),
 
   // fetches from local folder
-  'gravityforms' => array('dir' => 'lib/gravityforms')
+  // 'gravityforms' => array('dir' => 'lib/gravityforms')
 
   // fetches from git repository
   // 'wp-github-activity' => array('branch' => 'origin/master' => 'git' => 'https://github.com/alexkingorg/wp-github-activity'),
@@ -23,3 +23,12 @@ $env->plugins(array(
   // 'more-types' => array('version' => '2.1', 'svn' => 'http://plugins.svn.wordpress.org/more-fields' )
 
 ));
+
+$env->database(array(
+    'name' => 'rsmm',
+    'user' => 'vagrant',
+    'password' => 'vagrant',
+    'host' => '127.0.0.1',
+    'charset' => 'utf8'
+  ));
+

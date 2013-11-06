@@ -95,11 +95,9 @@
       tags:
         - nginx
 
-
-
-    - name: copy php.ini to wp-admin folder
-      sudo: true
-      file: src=/etc/php5/fpm/php.ini dest=/var/www/custom.roadsideweb.dev/public_html/wordpress/wp-admin/
+    # - name: copy php.ini to wp-admin folder
+    #   sudo: true
+    #   file: src=/etc/php5/fpm/php.ini dest=/var/www/custom.roadsideweb.dev/public_html/wordpress/wp-admin/
 
 
     #     # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
@@ -204,8 +202,9 @@
       tags:
         - php
 
-    - name: change to pomander directory
-      action: shell cd /var/www/pomander && sudo pom deploy:wordpress
+          ### need to figure out database settings for pomander, then append && sudo pom db:create
+    - name: change to pomander directory and do the pomander magic
+      action: shell cd /var/www/pomander && sudo pom deploy:wordpress && sudo pom wp_config
       tags:
         -pomander
 
