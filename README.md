@@ -22,10 +22,11 @@ The current target is Ubuntu LTS releases (Debian stable for the dev branch) run
 http://vagrantbox.es has a list of vagrant boxes available
 
 We currently use these boxes:
+
     ##master
     http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
     ##dev
-    wheezy64 http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210-nocm.box
+    http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210-nocm.box
 
 You may run this command to add the box manually, but vagrant up will download and enable it for you:
 
