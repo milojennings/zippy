@@ -1,22 +1,23 @@
 #zippy
+======
 ---
-Zippy is a practical application of Vagrant and Ansible, for portable auto-deployments.
+Zippy is a practical application of Vagrant, Ansible, and Pomander for portable auto-deployments.
 
 The idea is a zero-to-hero LNMP stack running from vagrant up.
 
-Our original target was Ubuntu LTS releases, but due to a significant ram difference, is now Debian stable running wordpress.
+Our original target was Ubuntu LTS releases, but due to a significant ram difference, is now Debian stable.
 
 ---
 ##Notes!
 ---
 
-            .--.           ____________     _        _      _       _
-           |o_o |         |_____  _____|   | |      | |    \ \     / /
-           |:_/ |              |  |        | |      | |     \ \   / /
-          //   \ \             |  |        | |      | |      \_\_/_/
-         (|     | )            |  |        | |      | |      / / \ \
-        /'\_   _/`\            |  |        | |______| |     / /   \ \
-        \___)=(___/            |__|        |__________|    /_/     \_\
+        .--.           ____________     _        _      _       _
+       |o_o |         |____    ____|   | |      | |    \ \     / /
+       |:_/ |              |  |        | |      | |     \ \   / /
+      //   \ \             |  |        | |      | |      \_\_/_/
+     (|     | )            |  |        | |      | |      / / \ \
+    /'\_   _/`\            |  |        | |______| |     / /   \ \
+    \___)=(___/            |__|        |__________|    /_/     \_\
 
 
 http://vagrantbox.es has a list of vagrant boxes available
@@ -37,8 +38,13 @@ To install ansible from git use:
 
 ###################
 
+You need: 
+-git
+-virtualbox
+-vagrant
+-ansible (1.4.x)
 
-current command set to get rockin' (you need: ansible (1.4.x), git, vagrant & virtualbox on the host machine):
+current command set to get rockin':
 
     git clone https://github.com/milojennings/zippy.git
     cd zippy
@@ -57,7 +63,7 @@ current command set to get rockin' (you need: ansible (1.4.x), git, vagrant & vi
 -use vagrant provision if changes are made to the ansible playbook(s)
 -use vagrant reload if changes are made to the Vagrantfile
 
-note that vbguest may bark back an error:
+Note that vbguest may bark an error:
 
     Installing the Window System drivers ...fail!
     (Could not find the X.Org or XFree86 Window System.)

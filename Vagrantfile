@@ -70,12 +70,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # This directory is used to maintain default database scripts as well as backed
   # up mysql dumps (SQL files) that are to be imported automatically on vagrant up
 
-  config.vm.synced_folder "database/", "/srv/database"
-  if vagrant_version >= "1.3.0"
-    config.vm.synced_folder "database/data/", "/var/lib/mysql", mount_options: [ "dmode=777", "fmode=777" ]
-  else
-    config.vm.synced_folder "database/data/", "/var/lib/mysql", extra: 'dmode=777,fmode=777'
-  end
+  # config.vm.synced_folder "database/", "/srv/database"
+  # if vagrant_version >= "1.3.0"
+  #   config.vm.synced_folder "database/data/", "/var/lib/mysql", mount_options: [ "dmode=777", "fmode=777" ]
+  # else
+  #   config.vm.synced_folder "database/data/", "/var/lib/mysql", extra: 'dmode=777,fmode=777'
+  # end
 
 
   # Provision using Ansible

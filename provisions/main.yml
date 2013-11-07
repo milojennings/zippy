@@ -42,7 +42,7 @@
         - htop
         - git
         - mysql-server
-        - mysql-client
+        # - mysql-client
         - python-apt
         - python-mysqldb
         - nginx
@@ -204,7 +204,7 @@
 
           ### need to figure out database settings for pomander, then append && sudo pom db:create
     - name: change to pomander directory and do the pomander magic
-      action: shell cd /var/www/pomander && sudo pom deploy:wordpress && sudo pom wp_config
+      action: shell cd /var/www/pomander && sudo pom deploy:wordpress && sudo pom wp_config && sudo pom db:create
       tags:
         -pomander
 

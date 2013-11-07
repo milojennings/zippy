@@ -26,9 +26,9 @@ $env->plugins(array(
 
 $env->database(array(
     'name' => 'rsmm',
-    'user' => 'vagrant',
-    'password' => 'vagrant',
+    'user' => 'root',
+    'password' => '',
     'host' => '127.0.0.1',
     'charset' => 'utf8'
-  ));
+));
 

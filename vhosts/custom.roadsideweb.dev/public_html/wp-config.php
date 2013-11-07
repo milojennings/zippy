@@ -1,18 +1,18 @@
 <?php
 define('DB_NAME', 'rsmm');
-define('DB_USER', 'vagrant');
-define('DB_PASSWORD', 'vagrant');
+define('DB_USER', 'root');
+define('DB_PASSWORD', '');
 define('DB_HOST', '127.0.0.1');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
-define('AUTH_KEY',         'fN`-rBkV(`5)6+ip6aO,FTIwS=^YM+l8I(!pW{_GSpTA?DM|<0O8+59yiT %/GIU');
-define('SECURE_AUTH_KEY',  '^|N$h+iRs7zyWeY@xmyj-K4OMT|V[~fd$*@e@t-~%p^Ftzzz*0FI^xg-L|^b}R)Z');
-define('LOGGED_IN_KEY',    '[1!;uWUx,4i&)l$e+Qc9+3Q|k/kODWA eXDe,a{R|.D+fBWvTGzy5T+`6t~?|Cb/');
-define('NONCE_KEY',        'Ai/A8G2uqrwh/5x]?FnWK~~+XkLPCH@gMOQ]14,8y#<Vz4Dy_Z7e-0<w0GnK7;`=');
-define('AUTH_SALT',        'm.]<)qDUXX?-1co])ZC^PZFepd=``o.IWwa{-8Lz52r<.3yy,N2hUl.%pefsW,hI');
-define('SECURE_AUTH_SALT', '-nQb g:=W!-U-2@_:J:XHO@=5xcf$}P^UoTXW, _~Uu=5C,CmW/R=vV6I4_g= z=');
-define('LOGGED_IN_SALT',   ']G~~Q{DtaNDT;5*2OwOP ; `Q9f9*xMCOi5,~X$-n[7^8qD[C*N[M7bhGrZ |BFz');
-define('NONCE_SALT',       'Wu@W-2:V$UA}WNp_!`]j]G>j+}d{vF|L>#ydAxJ+$gu,vcBE<c*JK+&H%hyt--| ');
+define('AUTH_KEY',         'qY7=Hc[]naSA)>H~UVO.36C|+XaV~M$ M;eY)n:Bw!)t`#}O=BL+[(]Jxm(`0$)C');
+define('SECURE_AUTH_KEY',  'f ^**GcLVF/*#h,s|=oB|Wsb6^d6.af{7w3qmtR_MXM-jIuI$@/mVSAJvySQW9)/');
+define('LOGGED_IN_KEY',    'ipT*0P_~a5fmVj_^/.jga&uhr}W1-dhh<d76]Hx[-rZ;xGO.ZqsGXcGaCM@9YMXI');
+define('NONCE_KEY',        '&Bg~< [$H]*de>-pG8a(b+A-O2lo^cz2WOjLms-z1rxHL/=qfS+}r}`Zt!i]HQ3]');
+define('AUTH_SALT',        '1^vx a8MYTb~kjHdX+<er&&m(P+PXvdxId|+WCA#-@}ibiy<U.yvk#Y~>81w=m,P');
+define('SECURE_AUTH_SALT', 'yR-^N`JlWOQhpbM.itG4+%d(`=TKhi.#[th{zxX|6AWMK4Gw<;-Oan`yi-|)]a?;');
+define('LOGGED_IN_SALT',   '#/Ss5Up[4}R;}{a._R=cjLBY|q(H- 3z3RL*n+e|WFXC_Osy kEMY|33ZkU{4`-`');
+define('NONCE_SALT',       '_yLkkK#IW~|o_U #w%%X,Z]t{qc-6eOY-A%I6ldr2z>6R:.i&e4p5$|4MI=IH^iL');
 
 $table_prefix = 'wp_';
 define ('WPLANG', '');
