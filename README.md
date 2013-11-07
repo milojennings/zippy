@@ -42,10 +42,7 @@ current command set to get rockin' (you need: ansible (1.4.x), git, vagrant & vi
 
     git clone https://github.com/milojennings/zippy.git
     cd zippy
-<<<<<<< HEAD
-=======
     ### unfortunately vagrant plugin install can only take one argument  :-(
->>>>>>> dev
     vagrant plugin install vagrant-vbguest
     vagrant plugin install vagrant-cachier
     vagrant plugin install vagrant-hostsupdater
@@ -67,8 +64,6 @@ note that vbguest may bark back an error:
     An error occurred during installation of VirtualBox Guest Additions ...
 
 There is nothing to worry about though, as our server is headless (display server is not used).
-<<<<<<< HEAD
-=======
 
 
 If you are getting this error on Mac OS:
@@ -83,4 +78,4 @@ Try running this:
     sudo /Library/StartupItems/VirtualBox/VirtualBox restart
 
 ---
->>>>>>> dev
+
