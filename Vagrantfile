@@ -15,27 +15,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # with possible backward compatible issues.
   vagrant_version = Vagrant::VERSION.sub(/^v/, '')
 
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
+
+
+  config.vm.box = "wheezy64"
+  config.vm.box_url = "http://netcologne.dl.sourceforge.net/project/zippybox/vagrant-wheezy64-zippy.box"
+
+  # config.vm.box = "precise64"
+  # config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 
   # Build a local cache of apt packages to save time rebuilding VM
   # Requires https://github.com/fgrehm/vagrant-cachier
   ### i'm not sure this is faster  ## -ryan
   # config.cache.enable :apt
 
-  config.vm.network :private_network, ip: "11.22.33.44"
-  config.vm.network :forwarded_port, guest: 80, host: 8080
-
   config.vm.provider :virtualbox do |vb|
     #   # Don't boot with headless mode
     #   vb.gui = true
+    ## this gobble-dy-gook may fix errors on some host machines
+    # vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
-  # # Settings for vbguest plugin
-  config.vbguest.auto_update = true
-  config.vbguest.no_remote = false
-  config.vbguest.installer = "CloudUbuntuVagrant"
+  ## 10.0.0.0 to 10.255.255.255 are reserved for private networks, best to use one of those
+  config.vm.network :private_network, ip: "10.20.30.40"
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+
+  # # Settings for vbguest plugin, should not be needed for wheezy box
+  # config.vbguest.auto_update = true
+  # config.vbguest.no_remote = false
+  # config.vbguest.installer = "CloudUbuntuVagrant"
 
   # Drive mapping
   #

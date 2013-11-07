@@ -4,7 +4,7 @@ Zippy is a practical application of Vagrant and Ansible, for portable auto-deplo
 
 The idea is a zero-to-hero LNMP stack running from vagrant up.
 
-The current target is Ubuntu LTS releases (Debian stable for the dev branch) running wordpress.
+Our original target was Ubuntu LTS releases, but due to a significant ram difference, is now Debian stable running wordpress.
 
 ---
 ##Notes!
@@ -21,19 +21,13 @@ The current target is Ubuntu LTS releases (Debian stable for the dev branch) run
 
 http://vagrantbox.es has a list of vagrant boxes available
 
-We currently use these boxes:
+We currently use this box:
 
-    ##master
-    http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
-    ##dev
-    http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210-nocm.box
+    https://bitbucket.org/ryanpcmcquen/zippybox/downloads/vagrant-wheezy64-zippy.box
 
 You may run this command to add the box manually, but vagrant up will download and enable it for you:
 
-    ##master
-    vagrant box add precise64 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
-    ##dev
-    vagrant box add wheezy64 http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210-nocm.box
+    vagrant box add wheezy64 https://bitbucket.org/ryanpcmcquen/zippybox/downloads/vagrant-wheezy64-zippy.box
 
 
 To install ansible from git use:
@@ -48,7 +42,11 @@ current command set to get rockin' (you need: ansible (1.4.x), git, vagrant & vi
 
     git clone https://github.com/milojennings/zippy.git
     cd zippy
-    vagrant plugin install vagrant-vbguest --plugin-version 0.10.0.pre0 --plugin-prerelease --plugin-source https://rubygems.org
+<<<<<<< HEAD
+=======
+    ### unfortunately vagrant plugin install can only take one argument  :-(
+>>>>>>> dev
+    vagrant plugin install vagrant-vbguest
     vagrant plugin install vagrant-cachier
     vagrant plugin install vagrant-hostsupdater
     vagrant up
@@ -69,3 +67,20 @@ note that vbguest may bark back an error:
     An error occurred during installation of VirtualBox Guest Additions ...
 
 There is nothing to worry about though, as our server is headless (display server is not used).
+<<<<<<< HEAD
+=======
+
+
+If you are getting this error on Mac OS:
+
+    Progress state: NS_ERROR_FAILURE
+    VBoxManage: error: Failed to create the host-only adapter
+    VBoxManage: error: VBoxNetAdpCtl:
+    Error while adding new interface: failed to open /dev/vboxnetctl: No such file or directory
+
+Try running this:
+
+    sudo /Library/StartupItems/VirtualBox/VirtualBox restart
+
+---
+>>>>>>> dev
