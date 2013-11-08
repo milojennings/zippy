@@ -1,5 +1,4 @@
 #zippy
-======
 ---
 Zippy is a practical application of Vagrant, Ansible, and Pomander for portable auto-deployments.
 
@@ -39,10 +38,15 @@ To install ansible from git use:
 ###################
 
 You need: 
+
 -git
+
 -virtualbox
+
 -vagrant
+
 -ansible (1.4.x)
+
 
 current command set to get rockin':
 
