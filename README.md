@@ -11,7 +11,7 @@ Our original target was Ubuntu LTS releases, but due to a significant ram differ
 ---
 
         .--.           ____________     _        _      _       _
-       |o_o |         |_____  _____|   | |      | |    \ \     / /
+       |o_o |         |_____   ____|   | |      | |    \ \     / /
        |:_/ |              |  |        | |      | |     \ \   / /
       //   \ \             |  |        | |      | |      \_\_/_/
      (|     | )            |  |        | |      | |      / / \ \
