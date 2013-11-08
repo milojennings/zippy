@@ -1,0 +1,11 @@
+0.1 release!
+============
+2013.11.07
+
+Things are far from perfect but stable enough to release at this point. Pomander is handling all wordpress provisioning, including the database creation and once ansible 1.4.x comes out we will be running off of only stable releases.
+
+Now we will begin to test deployment to other providers.
+
+:-)
+
+-ryan
