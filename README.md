@@ -39,13 +39,10 @@ To install ansible from git use:
 
 You need: 
 
--git
-
--virtualbox
-
--vagrant
-
--ansible (1.4.x)
+- git
+- virtualbox
+- vagrant
+- ansible (1.4.x)
 
 
 current command set to get rockin':
