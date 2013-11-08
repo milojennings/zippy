@@ -1,5 +1,4 @@
 #zippy
-======
 ---
 Zippy is a practical application of Vagrant, Ansible, and Pomander for portable auto-deployments.
 
@@ -47,6 +46,7 @@ You need:
 -vagrant
 
 -ansible (1.4.x)
+
 
 current command set to get rockin':
 
