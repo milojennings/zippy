@@ -1,0 +1,31 @@
+---
+
+    - name: install nginx
+      apt: pkg={{ item }}
+      with_items:
+        - nginx
+      tags:
+        - nginx
+
+
+    - name: configure nginx startup
+      template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+      tags:
+       - nginx
+
+    - name: configure nginx default
+      template: src=default.j2 dest=/etc/nginx/sites-enabled/default owner=root group=root mode=0644
+      tags:
+        - nginx
+
+
+    - name: Add nginx restrictions file
+      template: src=restrictions.conf.j2 dest=/etc/nginx/conf.d/restrictions.conf owner=root group=root mode=0644
+      tags:
+        - nginx
+
+    - name: Add Wordpress specific configuration file
+      template: src=wordpress.conf.j2 dest=/etc/nginx/conf.d/wordpress.conf owner=root group=root mode=0644
+      tags:
+        - nginx
+

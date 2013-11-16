@@ -10,6 +10,7 @@ Our original target was Ubuntu LTS releases, but due to a significant ram differ
 ##Notes!
 ---
 
+    :::text
         .--.           ____________     _        _      _       _
        |o_o |         |_____   ____|   | |      | |    \ \     / /
        |:_/ |              |  |        | |      | |     \ \   / /
@@ -21,18 +22,16 @@ Our original target was Ubuntu LTS releases, but due to a significant ram differ
 
 http://vagrantbox.es has a list of vagrant boxes available
 
-We currently use this box:
+We currently use our own custom box for local development:
 
-    http://netcologne.dl.sourceforge.net/project/zippybox/vagrant-wheezy64-zippy.box
+    :::text
+    http://softlayer-dal.dl.sourceforge.net/project/zippybox/zippy-wheezy64-lemp.box
 
 You may run this command to add the box manually, but vagrant up will download and enable it for you:
 
-    vagrant box add wheezy64 http://netcologne.dl.sourceforge.net/project/zippybox/vagrant-wheezy64-zippy.box
+    :::text
+    vagrant box add wheezy64-lemp http://softlayer-dal.dl.sourceforge.net/project/zippybox/zippy-wheezy64-lemp.box
 
-
-To install ansible from git use:
-
-    sudo pip install git+https://github.com/ansible/ansible.git
 
 
 ###################
@@ -42,16 +41,19 @@ You need:
 - git
 - virtualbox
 - vagrant
-- ansible (1.4.x)
+- ansible
 
 
 current command set to get rockin':
 
-    git clone https://github.com/milojennings/zippy.git
+    :::text
+    git clone https://bitbucket.org/roadsidemultimedia/zippy.git
     cd zippy
     ### unfortunately vagrant plugin install can only take one argument  :-(
+        ### if you need to install a pre-release or different verison, do it like so:
+        ## vagrant plugin install vagrant-vbguest --plugin-version 0.10.0.pre1 --plugin-source https://rubygems.org
     vagrant plugin install vagrant-vbguest
-    vagrant plugin install vagrant-cachier
+    vagrant plugin install vagrant-digitalocean
     vagrant plugin install vagrant-hostsupdater
     vagrant up
 
@@ -60,12 +62,13 @@ current command set to get rockin':
 
 ###Vagrant usage:
 
--vagrant up only needs to be done once (unless you reboot)
--use vagrant provision if changes are made to the ansible playbook(s)
--use vagrant reload if changes are made to the Vagrantfile
+- vagrant up only needs to be done once (unless you reboot)
+- use vagrant provision if changes are made to the ansible playbook(s)
+- use vagrant reload if changes are made to the Vagrantfile
 
 Note that vbguest may bark an error:
 
+    :::text
     Installing the Window System drivers ...fail!
     (Could not find the X.Org or XFree86 Window System.)
     An error occurred during installation of VirtualBox Guest Additions ...
@@ -75,6 +78,7 @@ There is nothing to worry about though, as our server is headless (display serve
 
 If you are getting this error on Mac OS:
 
+    :::text
     Progress state: NS_ERROR_FAILURE
     VBoxManage: error: Failed to create the host-only adapter
     VBoxManage: error: VBoxNetAdpCtl:
@@ -82,6 +86,7 @@ If you are getting this error on Mac OS:
 
 Try running this:
 
+    :::text
     sudo /Library/StartupItems/VirtualBox/VirtualBox restart
 
 ---

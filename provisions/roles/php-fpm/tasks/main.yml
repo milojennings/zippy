@@ -1,0 +1,83 @@
+---
+
+    - name: install php-fpm
+      apt: pkg={{ item }}
+      with_items:
+        - php5-fpm
+        - php5-mysql
+        - php5-cli
+        - php5-curl
+        - php5-mcrypt
+        - php5-sqlite
+
+      tags:
+        - php-fpm
+
+
+
+
+    #     # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
+    # - name: configure php5 www.conf default
+    #   template: src=www.conf.j2 
+        # dest=/etc/php5/fpm/pool.d/www.conf
+        # owner=root
+        # group=root
+        # mode=0644
+    #   tags:
+    #     - php-fpm
+
+
+
+
+    #   # not necessary with rewritten www.conf, comment out when ansible 1.4 drops
+    # - name: Set phpfpm to listen on unix socket instead of TCP port
+    #   lineinfile: dest=/etc/php5/fpm/pool.d/www.conf
+    #     regexp='^listen '
+    #     line='listen = /var/run/php5-fpm.sock'
+    #   tags: php-fpm
+
+    - name: Turn on PHP error reporting
+      lineinfile: dest=/etc/php5/fpm/php.ini
+        regexp='^display_errors'
+        line='display_errors = On'
+      tags: php-fpm
+
+
+    # WP Fix im php.ini 
+    # See: http://codex.wordpress.org/Nginx
+    - name: Turn off cgi.fix_pathinfo for WP compatability
+      lineinfile: dest=/etc/php5/fpm/php.ini
+        regexp='^cgi.fix_pathinfo'
+        line='cgi.fix_pathinfo = 0;'
+      tags: php-fpm
+
+
+    - name: increase maximum upload size to 64mb for wordpress
+      lineinfile: dest=/etc/php5/fpm/php.ini
+        regexp='^upload_max_filesize'
+        line='upload_max_filesize = 64M;'
+      tags: php-fpm
+
+
+    - name: increase maximum post size to 64mb for wordpress
+      lineinfile: dest=/etc/php5/fpm/php.ini
+        regexp='^post_max_size'
+        line='post_max_size = 64M;'
+      tags: php-fpm
+
+
+    # - name: install phpmyadmin
+    #   apt: name=phpmyadmin state=installed
+
+    # - name: set up phpmyadmin user
+    #   mysql_user: name=phpmyadmin 
+    #     password='password'
+    #     priv=*.*:ALL state=present
+
+    # - name: configure phpmyadmin
+    #   sudo: true
+    #   template: src=configs/phpmyadmin/phpmyadmin.conf.j2
+    #     dest=/etc/dbconfig-common/phpmyadmin.conf
+    #   notify: 
+    #     - update phpmyadmin            
+

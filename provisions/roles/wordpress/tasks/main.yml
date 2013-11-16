@@ -1,0 +1,125 @@
+---
+
+
+  - name: check for pomander
+    # command: whereis pom == /usr/local/bin/pom
+    # file: path=/usr/local/bin/pom state=absent
+    fetch: src=/usr/local/bin/pom dest=/usr/local/bin/pomander fail_on_missing=yes
+    register: result
+    ignore_errors: true
+
+
+  - name: install composer
+    # when: isFirstRun == true
+    shell: curl -s https://getcomposer.org/installer | php
+    # register: isFirstRun
+    when: result|failed
+    # when: whereis composer != ' '
+
+    # register: result
+
+    tags:
+      - pomander
+
+
+
+  - name: move composer executable to /usr/local/bin
+    command: sudo mv composer.phar /usr/local/bin/composer
+    # when: isFirstRun == true
+    when: result|failed
+
+    # when: result|success
+
+    tags:
+      - pomander
+
+
+
+  - name: install pomander
+    command: composer global require pomander/pomander:@stable
+    # when: isFirstRun == true
+    when: result|failed
+
+    # when: result|success
+
+    tags:
+      - pomander
+
+
+
+  - name: install pomander-wordpress
+    # when: isFirstRun == true
+    command: composer global require pomander/wordpress:@stable
+    # when: result|success
+    when: result|failed
+
+    tags:
+      - pomander
+
+  - name: create symlink for pomander
+    file: src=/root/.composer/vendor/bin/pom dest=/usr/local/bin/pom state=link
+    # when: isFirstRun == true
+    # when: result|success
+    when: result|failed
+
+    tags:
+      - pomander
+
+
+
+  - name: change to pomander directory and do the pomagic
+    shell: cd /var/www/pomander && sudo pom deploy:wordpress && sudo pom wp_config && sudo pom db:create
+    # when: isFirstRun == true
+    # when: result|success
+    when: result|failed
+
+    tags:
+      - pomander
+
+
+
+
+  - name: get 2013 wp theme
+    get_url: url=http://wordpress.org/themes/download/twentythirteen.1.1.zip dest=/root/
+    # when: isFirstRun == true
+    # when: result|success
+    when: result|failed
+
+
+
+    # register: get_url_result
+
+  - name: extract wp theme
+    command: unzip twentythirteen.1.1.zip -d /var/www/default/public_html/public/themes/
+    # when: isFirstRun == true
+    # when: result|success
+    # when: register.changed == True
+    when: result|failed
+
+
+
+
+    # register: isFirstRun == false
+    notify:
+      - restart nginx
+      - restart php5-fpm
+
+
+# - name: Check that our config is valid
+#   action: command apache2ctl configtest
+#   register: result
+#   ignore_errors: True
+
+# - name: Rolling back - Restoring old default virtualhost
+#   action: command a2ensite default
+#   when: result|failed
+
+# - get_url: url=http://example.com/tarball.tar.gz dest=/the/tarball.tar.gz 
+#   register: get_url_result
+
+# - shell:  tar -xvf /the/tarball.tar.gz
+#   when: register.changed
+
+# - shell: make install chdir=/whatever/directory
+#   when: register.changed
+

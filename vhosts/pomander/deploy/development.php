@@ -1,7 +1,7 @@
 <?php
 
 $env->load('Wordpress');
-$env->deploy_to('/var/www/custom.roadsideweb.dev/public_html');
+$env->deploy_to('/var/www/default/public_html/');
 
 $env->wordpress(array(
   'version'   => '3.7.1',
@@ -24,11 +24,19 @@ $env->plugins(array(
 
 ));
 
+// $env->db_swap_url(true);
+
 $env->database(array(
-    'name' => 'rsmm',
+    'name' => 'zippy',
     'user' => 'root',
     'password' => '',
-    'host' => '127.0.0.1',
+    'host' => 'default',
     'charset' => 'utf8'
 ));
 
+
+// $app = builder()->get_application();
+// // $secret_keys = file_get_contents("https://api.wordpress.org/secret-key/1.1/salt/");
+// // $cache = isset($app->env->wordpress["cache"])? "define('WP_CACHE', {$app->env->wordpress["cache"]});" : "";
+// $siteurl = isset($app->env->wordpress["url"])? "'{$app->env->wordpress["url"]}'":"'http://'.\$_SERVER['SERVER_NAME']";
+// $siteurl .= isset($app->env->wordpress["base_uri"])? ".'{$app->env->wordpress["base_uri"]}'" : "";

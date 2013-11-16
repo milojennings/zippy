@@ -1,0 +1,28 @@
+---
+
+  - name: update cache/upgrade pkgs
+    apt: update_cache=yes upgrade=dist cache_valid_time=3600
+    tags:
+      - apt
+
+  - name: install dev pkgs
+    apt: pkg={{ item }}
+    with_items:
+      # - linux-generic
+      - linux-headers-amd64
+      - build-essential
+      - nfs-common
+      - nfs-kernel-server
+      - rpcbind
+      - curl
+      - vim
+      - htop
+      - git
+      - python-apt
+      - zip
+      - unzip
+      - subversion
+
+    tags:
+      - apt
+

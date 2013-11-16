@@ -1,0 +1,36 @@
+0.3 release!
+============
+LORAX
+2013.11.15
+
+
+A milestone release! Complete restructuring of Ansible into roles!
+
+Provisioning is now fully idempotent!
+
+Also the first release using the geiselTag naming scheme!
+
+
+0.2 release!
+============
+2013.11.12
+
+Zippy now deploys to live servers!
+
+
+0.1 release!
+============
+2013.11.07
+
+Things are far from perfect but stable enough to release at this point. 
+  
+  Pomander is handling all wordpress provisioning, including the database creation.
+
+  Once ansible 1.4.x comes out we will be running off of only stable releases.
+
+Now we will begin to test deployment to other providers.
+
+:-)
+
+-ryan
+
