@@ -2,8 +2,8 @@
 .vagrant
 vagrant_ansible_inventory_default
 
-vhosts/custom.roadsideweb.dev/public_html/wp-content/uploads
-vhosts/nginx*
+vhosts/default/public_html/wp-content/uploads
+
 
 # OS generated files #
 ######################
