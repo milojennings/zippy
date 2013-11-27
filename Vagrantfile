@@ -13,167 +13,97 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Store the current version of Vagrant for use in conditionals when dealing
   # with possible backward compatible issues.
+  
   vagrant_version = Vagrant::VERSION.sub(/^v/, '')
 
 
-  # vm.ca_path = "/etc/ssl/certs/ca-certificates.crt"
   config.vm.box = "wheezy64-lemp"
-  config.vm.box_url = "http://softlayer-dal.dl.sourceforge.net/project/zippybox/zippy-wheezy64-lemp.box"
+  config.vm.box_url = "https://bitbucket.org/roadsidemultimedia/zippy/downloads/zippy-wheezy64-lemp.box"
 
-  # config.vm.box = "precise64"
-  # config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
+  config.vm.synced_folder ".", "/vagrant", nfs: true
 
-  ## 10.0.0.0 to 10.255.255.255 are reserved for private networks, best to use one of those
-  config.vm.network :private_network, ip: "10.20.30.40"
-  config.vm.network :forwarded_port, guest: 80, host: 8080
-  config.vm.network :forwarded_port, guest: 443, host: 8443
 
-  ## Build a local cache of apt packages to save time rebuilding VM
-  ## Requires https://github.com/fgrehm/vagrant-cachier
-  ## vagrant plugin install vagrant-cachier
-  ### i'm not sure this is faster  ## -ryan
-  # config.cache.enable :apt
 
-  config.vm.provider :virtualbox do |vb|
-    #   # Don't boot with headless mode
-    #   vb.gui = true
-    ## this gobble-dy-gook may fix errors on some host machines
-    # vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
+###################
+## =>  LOCAL  <= ##
+###################
+
+config.vm.define "local" do |local|
+
+  local.vm.box = "wheezy64-lemp"
+  local.vm.box_url = "https://bitbucket.org/roadsidemultimedia/zippy/downloads/zippy-wheezy64-lemp.box"
+  local.vm.provider :virtualbox do |vb|
+    local.vm.synced_folder "vhosts/", "/var/www", nfs: true
+
+    ## 10.0.0.0 to 10.255.255.255 are reserved for private networks, best to use one of those
+    local.vm.network :private_network, ip: "10.20.30.40"
+    local.vm.network :forwarded_port, guest: 80, host: 8080
+    local.vm.network :forwarded_port, guest: 443, host: 8443
     vb.customize ["modifyvm", :id, "--memory", "512"]
-    vb.customize ["modifyvm", :id, "--cpus", "2"]
 
-  end
-
-
-  config.vm.provider :digital_ocean do |provider, override|
-
-    provider.ca_path = "/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt"
-    override.ssh.private_key_path = '~/.ssh/id_rsa'
-
-    # override.vm.box = 'wheezy64-lemp'
-    # override.vm.box_url = "http://softlayer-dal.dl.sourceforge.net/project/zippybox/zippy-wheezy64-lemp.box"
-
-    provider.client_id = ''
-    provider.api_key = ''
-
-    # provider.image = "Ubuntu 12.04 x64"
-    provider.image = "Debian 7.0 x64"
-    provider.size = "512MB"
-
-
-  end
-
-  ## 10.0.0.0 to 10.255.255.255 are reserved for private networks, best to use one of those
-  # config.vm.network :private_network, ip: "10.20.30.40"
-  # config.vm.network :forwarded_port, guest: 80, host: 8080
-
-
-  # # Settings for vbguest plugin, should not be needed for wheezy box
-  # config.vbguest.auto_update = true
-  # config.vbguest.no_remote = false
-  # config.vbguest.installer = "CloudUbuntuVagrant"
-
-  # Drive mapping
-  #
-  # The following config.vm.synced_folder settings will map directories in your Vagrant
-  # virtual machine to directories on your local machine. Once these are mapped, any
-  # changes made to the files in these directories will affect both the local and virtual
-  # machine versions. Think of it as two different ways to access the same file. When the
-  # virtual machine is destroyed with `vagrant destroy`, your files will remain in your local
-  # environment.
-
-
-  # /var/www/
-  # config.vm.synced_folder "vhosts/", "/var/www/", owner: "www-data"
-  config.vm.synced_folder "vhosts/", "/var/www", nfs: true
-
-
-  # # ~/ ## this is broken for now
-  # config.vm.synced_folder "vagranthome/", "/home/vagrant/"
-
-  # /srv/database/
-  #
-  # If a database directory exists in the same directory as your Vagrantfile,
-  # a mapped directory inside the VM will be created that contains these files.
-  # This directory is used to maintain default database scripts as well as backed
-  # up mysql dumps (SQL files) that are to be imported automatically on vagrant up
-
-  # config.vm.synced_folder "database/", "/srv/database"
-  # if vagrant_version >= "1.3.0"
-  #   config.vm.synced_folder "database/data/", "/var/lib/mysql", mount_options: [ "dmode=777", "fmode=777" ]
-  # else
-  #   config.vm.synced_folder "database/data/", "/var/lib/mysql", extra: 'dmode=777,fmode=777'
-  # end
-
-
-  # Provision using Ansible
-  #
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "provisions/site.yml"
-    ## ansible output is limited when used inside of vagrant, this is only an issue when things are broken, increase to 4 v's for maximum verbosity
-    ansible.verbose = "vvvv"
-    ansible.sudo = "true"
-    ansible.host_key_checking = "false"
-    # ansible.inventory_path = ""
-
-    # paths = [vagrant_dir + '/vhosts/runCounter']
-    #   paths.each do |path|
-    #     file_hosts = IO.read(vagrant_dir + '/vhosts/runCounter').split( "\n" )
-    #     file_hosts.each do |line|
-    #       if line[0..0] != '1'
-    #         isFirstRun == true
-    #       else 
-    #         line[0..0] >> '1'
-    #         isFirstRun == false
-    #       end
-    #     end
-    #   end
-
-    
-    ## Example tag that only processes tasks with the "nginx" tag
-    ## Super handy for troubleshooting a specific area of functionality
-    # ansible.tags = "nginx"
-  end
-
-
-  # Local Machine Hosts
-  #
-  # Harvested from: https://github.com/10up/varying-vagrant-vagrants/blob/master/Vagrantfile
-  #
-  # If the Vagrant plugin hostsupdater (https://github.com/cogitatio/vagrant-hostsupdater) is
-  # installed, the following will automatically configure your local machine's hosts file to
-  # be aware of the domains specified below. Watch the provisioning script as you may be
-  # required to enter a password for Vagrant to access your hosts file.
-  
-  if defined? VagrantPlugins::HostsUpdater
-
-    # Capture the paths to all vvv-hosts files under the www/ directory.
-    paths = [vagrant_dir + '/vhosts/vhosts']
-    # Dir.glob(vagrant_dir + '/vhosts/vhosts').each do |path|
-    #   paths << path
-    # end
-
-    # Parse through the vhosts files in each of the found paths and put the hosts
-    # that are found into a single array.
-    hosts = []
-    paths.each do |path|
-      new_hosts = []
-      file_hosts = IO.read(vagrant_dir + '/vhosts/vhosts').split( "\n" )
-      file_hosts.each do |line|
-        if line[0..0] != "#"
-          new_hosts << line
-        end
-      end
-      hosts.concat new_hosts
+    local.vm.provision "ansible" do |ansible|
+      ansible.playbook = "provisions/local.yml"
+      ansible.verbose = "vvvv"
+      ansible.sudo = "true"
+      ansible.host_key_checking = "false"
     end
 
-    # Pass the final hosts array to the hostsupdate plugin so it can perform magic.
-    config.hostsupdater.aliases = hosts
+    if defined? VagrantPlugins::HostsUpdater
+      # Capture the paths to all vvv-hosts files under the www/ directory.
+      paths = [vagrant_dir + '/vhosts/vhosts']
+      # Dir.glob(vagrant_dir + '/vhosts/vhosts').each do |path|
+      #   paths << path
+      # end
+      # Parse through the vhosts files in each of the found paths and put the hosts
+      # that are found into a single array.
+      hosts = []
+        paths.each do |path|
+          new_hosts = []
+          file_hosts = IO.read(vagrant_dir + '/vhosts/vhosts').split( "\n" )
+            file_hosts.each do |line|
+              if line[0..0] != "#"
+                new_hosts << line
+              end
+            end
+          hosts.concat new_hosts
+        end
+      # Pass the final hosts array to the hostsupdate plugin so it can perform magic.
+      config.hostsupdater.aliases = hosts
+    end
+  end
+end
+
+
+
+
+###################
+## => STAGING <= ##
+###################
+
+config.vm.define "staging" do |staging|
+  # staging.vm.box="default"
+  staging.ssh.private_key_path = '~/.ssh/id_rsa'
+  # staging.vm.box = "wheezy64-lemp"
+  # staging.vm.box_url = "https://bitbucket.org/roadsidemultimedia/zippy/downloads/zippy-wheezy64-lemp.box"
+  staging.vm.provider :digital_ocean do |provider, override|
+
+
+    provider.image = "Debian 7.0 x64"
+    provider.size = "512MB"
+    provider.ca_path = "/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt"
+
+    provider.api_key = ''
+    provider.client_id = ''
+
+    staging.vm.provision "ansible" do |ansible|
+      ansible.playbook = "provisions/staging.yml"
+      ansible.verbose = "vvvv"
+      ansible.sudo = "true"
+      ansible.host_key_checking = "false"
+    end
 
   end
-  
-  # If true, then any SSH connections made will enable agent forwarding.
-  # Default value: false
-  # config.ssh.forward_agent = true
+end
+
 
 end

@@ -19,6 +19,7 @@
       - htop
       - git
       - python-apt
+      - rubygems
       - zip
       - unzip
       - subversion

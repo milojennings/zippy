@@ -1,7 +1,8 @@
+#!/bin/sh
 server {
 
     server_name {{ ansible_eth0.ipv4.address }};
-    root /var/www/default/public_html/wordpress;
+    root /var/www/default/htdocs/;
 
     index index.php index.htm index.html;
 

@@ -1,0 +1,57 @@
+---
+
+
+  - name: check for wp-cli
+    file: src=/usr/local/bin/wp dest=/usr/bin/wp state=link
+    ### never use dashes in variable names, they will break everything
+    register: result
+    ignore_errors: true
+
+
+  - name: install wp-cli
+    sudo: false
+    when: result|changed
+    shell: curl https://raw.github.com/wp-cli/wp-cli.github.com/master/installer.sh | bash
+
+
+  - name: make wp-cli shortcut
+    when: result|changed
+    command: ln -s /home/vagrant/.wp-cli/bin/wp /usr/local/bin/wp
+    ignore_errors: true
+
+  - name: make /var/www/default/htdocs
+    when: result|changed
+    command: mkdir -p /var/www/default/htdocs/
+    ignore_errors: true
+
+
+  - name: download wordpress
+    when: result|changed
+    command: wp core download --config=/vagrant/wp-cli/wp-cli.yml
+    ignore_errors: true
+
+
+
+  - name: create wp-config
+    when: result|changed
+    command: wp core config --dbname=zippy --dbuser=root --config=/vagrant/wp-cli/wp-cli.yml
+    ignore_errors: true
+
+  - name: create wp database
+    when: result|changed
+    command: wp db create --config=/vagrant/wp-cli/wp-cli.yml
+    ignore_errors: true
+
+  - name: install wordpress
+    when: result|changed
+    command: wp core install --config=/vagrant/wp-cli/wp-cli.yml --url=10.20.30.40 --title=zippy9000 --admin_user=username --admin_password=password --admin_email=e@mail.net
+    ignore_errors: true
+
+  - name: set up permalinks
+    when: result|changed
+    command: wp rewrite structure '/blog/%postname%' --config=/vagrant/wp-cli/wp-cli.yml
+    ignore_errors: true
+    notify:
+    - restart nginx
+    - restart php5-fpm
+

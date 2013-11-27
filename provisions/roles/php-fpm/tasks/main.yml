@@ -16,7 +16,6 @@
 
 
 
-    #     # this currently causes a known issue in ansible, fix coming soon, works in 1.4 from git
     # - name: configure php5 www.conf default
     #   template: src=www.conf.j2 
         # dest=/etc/php5/fpm/pool.d/www.conf
@@ -29,7 +28,7 @@
 
 
 
-    #   # not necessary with rewritten www.conf, comment out when ansible 1.4 drops
+    #   # not necessary with debian, this is the default setting, ubuntu has this as its wacky default
     # - name: Set phpfpm to listen on unix socket instead of TCP port
     #   lineinfile: dest=/etc/php5/fpm/pool.d/www.conf
     #     regexp='^listen '
@@ -66,18 +65,14 @@
       tags: php-fpm
 
 
-    # - name: install phpmyadmin
-    #   apt: name=phpmyadmin state=installed
+    - name: install phpmyadmin
+      apt: name=phpmyadmin state=installed
 
-    # - name: set up phpmyadmin user
-    #   mysql_user: name=phpmyadmin 
-    #     password='password'
-    #     priv=*.*:ALL state=present
+    - name: set up phpmyadmin user
+      mysql_user: name=phpuser
+        password='pass'
+        priv=*.*:ALL state=present
 
-    # - name: configure phpmyadmin
-    #   sudo: true
-    #   template: src=configs/phpmyadmin/phpmyadmin.conf.j2
-    #     dest=/etc/dbconfig-common/phpmyadmin.conf
-    #   notify: 
-    #     - update phpmyadmin            
-
+    - name: configure phpmyadmin
+      template: src=phpmyadmin.conf.j2
+        dest=/etc/dbconfig-common/phpmyadmin.conf

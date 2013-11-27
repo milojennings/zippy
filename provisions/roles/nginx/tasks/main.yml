@@ -3,7 +3,7 @@
     - name: install nginx
       apt: pkg={{ item }}
       with_items:
-        - nginx
+        - nginx-naxsi
       tags:
         - nginx
 

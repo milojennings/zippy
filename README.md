@@ -1,36 +1,42 @@
-#zippy
+#ZIPPY
 ---
-Zippy is a practical application of Vagrant, Ansible, and Pomander for portable auto-deployments.
+
+**********THIS PROJECT HAS MOVED TO:**********
+https://bitbucket.org/roadsidemultimedia/zippy
+**********************************************
+
+Zippy is a practical application of Vagrant, Ansible, WP-CLI, and Capistrano-wp for portable auto-deployments.
 
 The idea is a zero-to-hero LNMP stack running from vagrant up.
 
-Our original target was Ubuntu LTS releases, but due to a significant ram difference, is now Debian stable.
+Our original target was Ubuntu LTS releases, but due to a significant ram difference, as well as the ability to serve more concurrent users with a lower error rate and response time, is now Debian stable.
 
 ---
 ##Notes!
 ---
 
     :::text
-        .--.           ____________     _        _      _       _
-       |o_o |         |_____   ____|   | |      | |    \ \     / /
-       |:_/ |              |  |        | |      | |     \ \   / /
-      //   \ \             |  |        | |      | |      \_\_/_/
-     (|     | )            |  |        | |      | |      / / \ \
-    /'\_   _/`\            |  |        | |______| |     / /   \ \
-    \___)=(___/            |__|        |__________|    /_/     \_\
-
+    ******************************************************
+    **        .--.       _________ __   __ __   __      **
+    **       |o_o |     /___  ___// /  / / \ \_/ /      **
+    **       |:_/ |        / /   / /__/ /   / _ \       **
+    **      //   \ \      /_/   /______/   /_/ \_\      **
+    **     (|     | )    __   __            __   __     **
+    **    /'\_   _/`\   |__| |  |  \    /  |_   |__|    **
+    **    \___)=(___/   |    |__|   \/\/   |__  |\      **
+    ******************************************************
 
 http://vagrantbox.es has a list of vagrant boxes available
 
 We currently use our own custom box for local development:
 
     :::text
-    http://softlayer-dal.dl.sourceforge.net/project/zippybox/zippy-wheezy64-lemp.box
+    https://bitbucket.org/roadsidemultimedia/zippy/downloads/zippy-wheezy64-lemp.box
 
 You may run this command to add the box manually, but vagrant up will download and enable it for you:
 
     :::text
-    vagrant box add wheezy64-lemp http://softlayer-dal.dl.sourceforge.net/project/zippybox/zippy-wheezy64-lemp.box
+    vagrant box add wheezy64-lemp https://bitbucket.org/roadsidemultimedia/zippy/downloads/zippy-wheezy64-lemp.box
 
 
 
@@ -39,9 +45,10 @@ You may run this command to add the box manually, but vagrant up will download a
 You need:
 
 - git
-- virtualbox
+- virtualbox + its extension pack
 - vagrant
-- ansible
+- ansible (you can install it with 'pip install ansible')
+
 
 
 current command set to get rockin':
@@ -49,13 +56,18 @@ current command set to get rockin':
     :::text
     git clone https://bitbucket.org/roadsidemultimedia/zippy.git
     cd zippy
-    ### unfortunately vagrant plugin install can only take one argument  :-(
-        ### if you need to install a pre-release or different verison, do it like so:
-        ## vagrant plugin install vagrant-vbguest --plugin-version 0.10.0.pre1 --plugin-source https://rubygems.org
-    vagrant plugin install vagrant-vbguest
+    ### unfortunately 'vagrant plugin install' can only take one argument  :-(
+    ### if you need to install a pre-release or different version, do it like so:
+    vagrant plugin install vagrant-vbguest --plugin-version 0.10.0.pre1 --plugin-source https://rubygems.org
+    ### vagrant plugin install vagrant-vbguest
     vagrant plugin install vagrant-digitalocean
     vagrant plugin install vagrant-hostsupdater
-    vagrant up
+    
+    ## for local:
+    vagrant up local
+    
+    ## for staging:
+    vagrant up staging --provider=digital_ocean
 
 
 ###################
