@@ -1,7 +1,7 @@
 #ZIPPY
 ---
 
-******THIS PROJECT HAS MOVED TO:******
+*****THIS PROJECT HAS MOVED TO:*****
 
 https://bitbucket.org/roadsidemultimedia/zippy
 
