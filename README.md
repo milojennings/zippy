@@ -2,7 +2,9 @@
 ---
 
 **********THIS PROJECT HAS MOVED TO:**********
+
 https://bitbucket.org/roadsidemultimedia/zippy
+
 **********************************************
 
 Zippy is a practical application of Vagrant, Ansible, WP-CLI, and Capistrano-wp for portable auto-deployments.
